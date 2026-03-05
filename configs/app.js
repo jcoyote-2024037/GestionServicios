@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import { dbConnection, connectPostgres, sequelize } from './db.js';
 import { corsOptions } from './cors-configuration.js';
 import { helmetConfiguration } from './helmet-configurations.js';
+import locationRoutes from '../src/fields/location/location.routes.js';
 
 const BASE_PATH = '/gestionservicio/v1';
 
@@ -23,6 +24,7 @@ const middlewares = (app) => {
 const routes = (app) => {
     // APS USE
     app.use(`${BASE_PATH}/users`, userRoutes);
+    app.use(`${BASE_PATH}/locations`, locationRoutes);
 
 
 
