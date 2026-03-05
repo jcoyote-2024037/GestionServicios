@@ -9,6 +9,9 @@ import { corsOptions } from './cors-configuration.js';
 import { helmetConfiguration } from './helmet-configurations.js';
 import locationRoutes from '../src/fields/location/location.routes.js';
 
+import userRoutes from '../src/fields/user/user.routes.js'; 
+import authRoutes from '../src/fields/auth/auth.routes.js';
+
 const BASE_PATH = '/gestionservicio/v1';
 
 const middlewares = (app) => {
@@ -19,12 +22,14 @@ const middlewares = (app) => {
     app.use(morgan('dev'));
 
     app.use('/uploads', express.static('./')); 
+    
 }
 
 const routes = (app) => {
     // APS USE
     app.use(`${BASE_PATH}/users`, userRoutes);
     app.use(`${BASE_PATH}/locations`, locationRoutes);
+    app.use(`${BASE_PATH}/auth`, authRoutes);
 
 
 
