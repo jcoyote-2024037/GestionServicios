@@ -7,36 +7,43 @@ import {
   updateLocation,
   deleteLocation
 } from './location.controller.js';
+import { validateJWT } from '../../../middlewares/validate_jwt.js';
+import { requireRole } from '../../../middlewares/validate_role.js';
 
 const router = Router();
 
-// crea una nueva location
-router.post(
-    '/', 
-    createLocation
-);
-
-// obtiene todas las locations
+// obtiene todas las locations, acepta filtros ?municipality= y ?department=
 router.get(
-    '/', 
-    getLocations
+    '/', validateJWT, getLocations
 );
 
 // obtiene una location por id
 router.get(
     '/:id', 
+    validateJWT, 
     getLocation
 );
 
-// actualiza una location por id
+// crea una nueva location (solo admin)
+router.post(
+    '/', validateJWT, 
+    requireRole('ADMIN_ROLE'), 
+    createLocation
+);
+
+// actualiza una location por id (solo admin)
 router.put(
     '/:id', 
+    validateJWT, 
+    requireRole('ADMIN_ROLE'), 
     updateLocation
 );
 
-// elimina una location por id (soft delete)
+// elimina una location por id - soft delete (solo admin)
 router.delete(
     '/:id', 
+    validateJWT, 
+    requireRole('ADMIN_ROLE'), 
     deleteLocation
 );
 
