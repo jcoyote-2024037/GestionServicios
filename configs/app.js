@@ -12,6 +12,8 @@ import userRoutes from '../src/fields/user/user.routes.js';
 import authRoutes from '../src/fields/auth/auth.routes.js';
 import servicesRoutes from '../src/fields/services/services.routes.js';
 import categoriesRoutes from '../src/fields/categories/categories.routes.js';
+import reviewsRoutes from '../src/fields/reviews/reviews.routes.js';
+import favoritesRoutes from '../src/fields/favorites/favorites.routes.js';
 
 const BASE_PATH = '/gestionservicio/v1';
 
@@ -27,11 +29,12 @@ const middlewares = (app) => {
 }
 
 const routes = (app) => {
-    // APS USE
     app.use(`${BASE_PATH}/users`, userRoutes);
     app.use(`${BASE_PATH}/auth`, authRoutes);
     app.use(`${BASE_PATH}/services`, servicesRoutes);
     app.use(`${BASE_PATH}/categories`, categoriesRoutes);
+    app.use(`${BASE_PATH}/reviews`, reviewsRoutes);
+    app.use(`${BASE_PATH}/favorites`, favoritesRoutes);
 
 
 
@@ -43,7 +46,6 @@ const routes = (app) => {
         })
     })
 
-    // Manejo de errores 404
     app.use((req, res) => {
         res.status(404).json({
             success: false,
