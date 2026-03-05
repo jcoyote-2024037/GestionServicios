@@ -7,13 +7,13 @@ import morgan from 'morgan';
 import { dbConnection, connectPostgres, sequelize } from './db.js';
 import { corsOptions } from './cors-configuration.js';
 import { helmetConfiguration } from './helmet-configurations.js';
+import locationRoutes from '../src/fields/location/location.routes.js';
 
 import userRoutes from '../src/fields/user/user.routes.js'; 
 import authRoutes from '../src/fields/auth/auth.routes.js';
 import servicesRoutes from '../src/fields/services/services.routes.js';
 import categoriesRoutes from '../src/fields/categories/categories.routes.js';
-
-
+import tagRoutes from '../src/fields/tag/tag.routes.js';
 import reviewsRoutes from '../src/fields/reviews/reviews.routes.js';
 import favoritesRoutes from '../src/fields/favorites/favorites.routes.js';
 
@@ -32,13 +32,13 @@ const middlewares = (app) => {
 
 const routes = (app) => {
     app.use(`${BASE_PATH}/users`, userRoutes);
+    app.use(`${BASE_PATH}/locations`, locationRoutes);
     app.use(`${BASE_PATH}/auth`, authRoutes);
     app.use(`${BASE_PATH}/services`, servicesRoutes);
     app.use(`${BASE_PATH}/categories`, categoriesRoutes);
-    
-    
     app.use(`${BASE_PATH}/reviews`, reviewsRoutes);
     app.use(`${BASE_PATH}/favorites`, favoritesRoutes);
+    app.use(`${BASE_PATH}/tags`, tagRoutes);
 
 
 
