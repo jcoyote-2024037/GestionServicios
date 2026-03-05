@@ -12,6 +12,7 @@ import {
 } from './tag.controller.js'
 import { validateJWT } from '../../../middlewares/validate_jwt.js'
 import { requireRole } from '../../../middlewares/validate_role.js'
+import { tagValidator } from '../../../middlewares/tagValidator.js';
 
 const router = Router()
 
@@ -34,16 +35,18 @@ router.post(
     '/',
     validateJWT,
     requireRole('ADMIN_ROLE'),
+    tagValidator,
     createTag
-)
+);
 
 // actualiza una tag por id (solo admin)
 router.put(
     '/:id',
     validateJWT,
     requireRole('ADMIN_ROLE'),
+    tagValidator,
     updateTag
-)
+);
 
 // elimina una tag solo si no esta asociada a un servicio (solo admin)
 router.delete(
