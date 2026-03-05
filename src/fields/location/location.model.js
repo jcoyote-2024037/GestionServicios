@@ -1,48 +1,37 @@
-'use strict';
-import { DataTypes } from 'sequelize';
-import { sequelize } from '../../../configs/db.js';
+'use strict'
+import mongoose from 'mongoose'
 
-const Location = sequelize.define('Location', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  name: {
-    type: DataTypes.STRING(150),
-    allowNull: false,
-  },
-  address: {
-    type: DataTypes.STRING(255),
-    allowNull: true,
-  },
-  municipality: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-  },
-  department: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-  },
-  reference: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  status: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
-  },
-}, {
-  tableName: 'locations',
-  timestamps: true,
-  paranoid: true,
-  indexes: [
-    {
-      unique: true,
-      fields: ['name', 'municipality', 'department', 'address'],
-      name: 'unique_location',
+const locationSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 150
     },
-  ],
-});
+    address: {
+        type: String,
+        trim: true
+    },
+    municipality: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 100
+    },
+    department: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 100
+    },
+    reference: {
+        type: String,
+        trim: true
+    },
+    status: {
+        type: Boolean,
+        default: true
+    }
+}, { timestamps: true })
 
-export default Location;
+export default mongoose.model('Location', locationSchema)

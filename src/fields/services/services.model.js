@@ -20,16 +20,21 @@ const serviceSchema = new mongoose.Schema({
         required: true
     },
     locationId: {
-        type: Number,
-        required: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Location',
+    required: true
     },
     tags: [
-        Number
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tag'
+    }
     ],
     telefono: {
         type: String,
         required: true,
         trim: true
+        
     },
     imagenes: [
         {

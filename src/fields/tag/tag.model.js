@@ -1,29 +1,22 @@
-'use strict';
-import { DataTypes } from 'sequelize';
-import { sequelize } from '../../../configs/db.js';
+'use strict'
+import mongoose from 'mongoose'
 
-const Tag = sequelize.define('Tag', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  name: {
-    type: DataTypes.STRING(80),
-    allowNull: false,
-    unique: true,
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  status: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
-  },
-}, {
-  tableName: 'tags',
-  timestamps: true,
-});
+const tagSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 80,
+        unique: true
+    },
+    description: {
+        type: String,
+        trim: true
+    },
+    status: {
+        type: Boolean,
+        default: true
+    }
+}, { timestamps: true })
 
-export default Tag;
+export default mongoose.model('Tag', tagSchema)
