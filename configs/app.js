@@ -10,6 +10,7 @@ import { helmetConfiguration } from './helmet-configurations.js';
 
 import userRoutes from '../src/fields/user/user.routes.js'; 
 import authRoutes from '../src/fields/auth/auth.routes.js';
+import servicesRoutes from '../src/fields/services/services.routes.js';
 
 const BASE_PATH = '/gestionservicio/v1';
 
@@ -28,6 +29,7 @@ const routes = (app) => {
     // APS USE
     app.use(`${BASE_PATH}/users`, userRoutes);
     app.use(`${BASE_PATH}/auth`, authRoutes);
+    app.use(`${BASE_PATH}/services`, servicesRoutes);
 
 
 
