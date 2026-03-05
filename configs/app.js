@@ -12,6 +12,8 @@ import userRoutes from '../src/fields/user/user.routes.js';
 import authRoutes from '../src/fields/auth/auth.routes.js';
 import servicesRoutes from '../src/fields/services/services.routes.js';
 import categoriesRoutes from '../src/fields/categories/categories.routes.js';
+import solicitudesRoutes from '../src/fields/solicitudes/solicitudes.routes.js';
+import reportesRoutes   from '../src/fields/reportes/reportes.routes.js';
 
 const BASE_PATH = '/gestionservicio/v1';
 
@@ -32,6 +34,8 @@ const routes = (app) => {
     app.use(`${BASE_PATH}/auth`, authRoutes);
     app.use(`${BASE_PATH}/services`, servicesRoutes);
     app.use(`${BASE_PATH}/categories`, categoriesRoutes);
+    app.use(`${BASE_PATH}/solicitudes`, solicitudesRoutes);
+    app.use(`${BASE_PATH}/reportes`,    reportesRoutes);
 
 
 
