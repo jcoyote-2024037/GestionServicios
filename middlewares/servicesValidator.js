@@ -1,0 +1,57 @@
+'use strict'
+
+export const servicesValidator = (req, res, next) => {
+
+    const {
+        nombre,
+        descripcion,
+        categoriaId,
+        ubicacion,
+        telefono,
+        usuarioId
+    } = req.body
+
+    if (!nombre || nombre.trim().length === 0) {
+        return res.status(400).json({
+            success: false,
+            message: 'El nombre es obligatorio'
+        })
+    }
+
+    if (!descripcion || descripcion.trim().length === 0) {
+        return res.status(400).json({
+            success: false,
+            message: 'La descripción es obligatoria'
+        })
+    }
+
+    if (!categoriaId) {
+        return res.status(400).json({
+            success: false,
+            message: 'La categoría es obligatoria'
+        })
+    }
+
+    if (!ubicacion || ubicacion.trim().length === 0) {
+        return res.status(400).json({
+            success: false,
+            message: 'La ubicación es obligatoria'
+        })
+    }
+
+    if (!telefono || telefono.trim().length === 0) {
+        return res.status(400).json({
+            success: false,
+            message: 'El teléfono es obligatorio'
+        })
+    }
+
+    if (!usuarioId) {
+        return res.status(400).json({
+            success: false,
+            message: 'El usuario dueño es obligatorio'
+        })
+    }
+
+    next()
+}
