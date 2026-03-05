@@ -12,6 +12,8 @@ import userRoutes from '../src/fields/user/user.routes.js';
 import authRoutes from '../src/fields/auth/auth.routes.js';
 import servicesRoutes from '../src/fields/services/services.routes.js';
 import categoriesRoutes from '../src/fields/categories/categories.routes.js';
+
+
 import reviewsRoutes from '../src/fields/reviews/reviews.routes.js';
 import favoritesRoutes from '../src/fields/favorites/favorites.routes.js';
 
@@ -33,6 +35,8 @@ const routes = (app) => {
     app.use(`${BASE_PATH}/auth`, authRoutes);
     app.use(`${BASE_PATH}/services`, servicesRoutes);
     app.use(`${BASE_PATH}/categories`, categoriesRoutes);
+    
+    
     app.use(`${BASE_PATH}/reviews`, reviewsRoutes);
     app.use(`${BASE_PATH}/favorites`, favoritesRoutes);
 
