@@ -1,8 +1,8 @@
 'use strict'
 
 import Solicitud from './solicitudes.model.js'
-import { estadosPermitidos } from '../../../helpers/helper.js'
-import { formatearSolicitud } from '../../../utils/util.js'
+import { estadosPermitidos } from '../../../helpers/solicitudes.helper.js'
+import { formatearSolicitud } from '../../../utils/solicitudes.util.js'
 
 /* ===========================
    CREAR SOLICITUD

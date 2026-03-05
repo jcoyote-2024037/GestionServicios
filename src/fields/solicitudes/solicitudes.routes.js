@@ -14,7 +14,7 @@ import {
 
 import { validateJWT }  from '../../../middlewares/validate_jwt.js'
 import { requireRole }  from '../../../middlewares/validate_role.js'
-import { solicitudesValidator, cambioEstadoValidator } from '../../../middlewares/servicesValidator.js'
+import { solicitudesValidator, cambioEstadoValidator } from '../../../middlewares/solicitudesValidator.js'
 
 const router = Router()
 

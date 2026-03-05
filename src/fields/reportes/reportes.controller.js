@@ -2,7 +2,7 @@
 
 import Reporte from './reportes.model.js'
 import Service from '../services/services.model.js'
-import { formatearReporte } from '../../../utils/util.js'
+import { formatearReporte } from '../../../utils/reportes.util.js'
 
 /* ===========================
    CREAR REPORTE
