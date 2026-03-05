@@ -6,7 +6,7 @@ export const servicesValidator = (req, res, next) => {
         nombre,
         descripcion,
         categoriaId,
-        ubicacion,
+        locationId,
         telefono,
         usuarioId
     } = req.body
@@ -32,12 +32,12 @@ export const servicesValidator = (req, res, next) => {
         })
     }
 
-    if (!ubicacion || ubicacion.trim().length === 0) {
-        return res.status(400).json({
-            success: false,
-            message: 'La ubicación es obligatoria'
-        })
-    }
+    if (!locationId) {
+    return res.status(400).json({
+        success: false,
+        message: 'La ubicación es obligatoria'
+    })
+}
 
     if (!telefono || telefono.trim().length === 0) {
         return res.status(400).json({
