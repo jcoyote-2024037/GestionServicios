@@ -19,15 +19,22 @@ const serviceSchema = new mongoose.Schema({
         ref: 'Category',
         required: true
     },
-    ubicacion: {
-        type: String,
-        required: true,
-        trim: true
+    locationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Location',
+    required: true
     },
+    tags: [
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tag'
+    }
+    ],
     telefono: {
         type: String,
         required: true,
         trim: true
+        
     },
     imagenes: [
         {
@@ -50,6 +57,7 @@ const serviceSchema = new mongoose.Schema({
         type: Number, // viene de PostgreSQL
         required: true
     }
+    
 }, { timestamps: true });
 
 export default mongoose.model('Service', serviceSchema);

@@ -7,11 +7,13 @@ import morgan from 'morgan';
 import { dbConnection, connectPostgres, sequelize } from './db.js';
 import { corsOptions } from './cors-configuration.js';
 import { helmetConfiguration } from './helmet-configurations.js';
+import locationRoutes from '../src/fields/location/location.routes.js';
 
 import userRoutes from '../src/fields/user/user.routes.js'; 
 import authRoutes from '../src/fields/auth/auth.routes.js';
 import servicesRoutes from '../src/fields/services/services.routes.js';
 import categoriesRoutes from '../src/fields/categories/categories.routes.js';
+import tagRoutes from '../src/fields/tag/tag.routes.js';
 
 const BASE_PATH = '/gestionservicio/v1';
 
@@ -29,9 +31,11 @@ const middlewares = (app) => {
 const routes = (app) => {
     // APS USE
     app.use(`${BASE_PATH}/users`, userRoutes);
+    app.use(`${BASE_PATH}/locations`, locationRoutes);
     app.use(`${BASE_PATH}/auth`, authRoutes);
     app.use(`${BASE_PATH}/services`, servicesRoutes);
     app.use(`${BASE_PATH}/categories`, categoriesRoutes);
+    app.use(`${BASE_PATH}/tags`, tagRoutes);
 
 
 
