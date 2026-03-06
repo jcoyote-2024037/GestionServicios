@@ -17,7 +17,7 @@ import reportesRoutes   from '../src/fields/reportes/reportes.routes.js';
 import tagRoutes from '../src/fields/tag/tag.routes.js';
 import reviewsRoutes from '../src/fields/reviews/reviews.routes.js';
 import favoritesRoutes from '../src/fields/favorites/favorites.routes.js';
-
+import badgesRoutes from '../src/fields/badges/badges_routes.js';
 
 const BASE_PATH = '/gestionservicio/v1';
 
@@ -43,6 +43,7 @@ const routes = (app) => {
     app.use(`${BASE_PATH}/reviews`, reviewsRoutes);
     app.use(`${BASE_PATH}/favorites`, favoritesRoutes);
     app.use(`${BASE_PATH}/tags`, tagRoutes);
+    app.use(`${BASE_PATH}/badges`, badgesRoutes);
 
 
 
