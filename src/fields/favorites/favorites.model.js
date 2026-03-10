@@ -11,6 +11,16 @@ const favoriteSchema = new mongoose.Schema({
         ref: 'Service',
         required: true
     },
+    notes: {
+        type: String,
+        trim: true,
+        maxlength: 300,
+        default: null
+    },
+    notificationEnabled: {
+        type: Boolean,
+        default: false
+    },
     fecha: {
         type: Date,
         default: Date.now
@@ -18,5 +28,6 @@ const favoriteSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 favoriteSchema.index({ usuarioId: 1, servicioId: 1 }, { unique: true });
+favoriteSchema.index({ servicioId: 1 });
 
 export default mongoose.model('Favorite', favoriteSchema);
