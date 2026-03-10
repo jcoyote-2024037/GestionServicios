@@ -9,7 +9,8 @@ import {
     deleteSolicitud,
     cambiarEstado,
     getHistorialPorUsuario,
-    getHistorialPorServicio
+    getHistorialPorServicio,
+    expirarSolicitudes
 } from './solicitudes.controller.js'
 
 import { validateJWT }  from '../../../middlewares/validate_jwt.js'
@@ -34,5 +35,8 @@ router.patch('/estado/:id',      cambioEstadoValidator, cambiarEstado)
 // Historiales
 router.get('/historial/usuario/:usuarioId',    getHistorialPorUsuario)
 router.get('/historial/servicio/:servicioId',  getHistorialPorServicio)
+
+// Expiración automática (admin / cron)
+router.post('/expirar',                        requireRole('ADMIN_ROLE'), expirarSolicitudes)
 
 export default router
