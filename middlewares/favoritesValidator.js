@@ -12,6 +12,11 @@ export const favoritesValidator = (req, res, next) => {
     if (!servicioId)
         return res.status(400).json({ success: false, message: 'El servicioId es obligatorio' })
 
+    const servicioIdStr = String(servicioId).trim()
+    if (servicioIdStr.length === 0)
+        return res.status(400).json({ success: false, message: 'El servicioId no puede estar vacío' })
+    req.body.servicioId = servicioIdStr
+
     if (notes !== undefined && notes !== null) {
         if (typeof notes !== 'string' || notes.trim().length === 0)
             return res.status(400).json({ success: false, message: 'Las notas no pueden estar vacías si se envían' })
