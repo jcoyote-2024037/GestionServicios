@@ -19,6 +19,7 @@ import reviewsRoutes from '../src/fields/reviews/reviews.routes.js';
 import favoritesRoutes from '../src/fields/favorites/favorites.routes.js';
 import badgesRoutes from '../src/fields/badges/badges_routes.js';
 import logsRoutes from '../src/fields/logs/logs_routes.js';
+import aiRoutes from '../src/AI/ai.routes.js';
 const BASE_PATH = '/gestionservicio/v1';
 
 const middlewares = (app) => {
@@ -45,6 +46,8 @@ const routes = (app) => {
     app.use(`${BASE_PATH}/tags`, tagRoutes);
     app.use(`${BASE_PATH}/badges`, badgesRoutes);
     app.use(`${BASE_PATH}/logs`, logsRoutes);
+    app.use(`${BASE_PATH}/ai`, aiRoutes);
+
 
 
 
