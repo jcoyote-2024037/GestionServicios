@@ -1,57 +1,113 @@
 'use strict'
 
-export const servicesValidator = (req, res, next) => {
+import Service from '../src/fields/services/services.model.js'
+import Category from '../src/fields/categories/categories.model.js'
+import Location from '../src/fields/location/location.model.js'
 
-    const {
-        nombre,
-        descripcion,
-        categoriaId,
-        locationId,
-        telefono,
-        usuarioId
-    } = req.body
+export const servicesValidator = async (req, res, next) => {
 
-    if (!nombre || nombre.trim().length === 0) {
-        return res.status(400).json({
-            success: false,
-            message: 'El nombre es obligatorio'
+    try {
+
+        const {
+            nombre,
+            descripcion,
+            categoriaId,
+            locationId,
+            telefono,
+            email
+        } = req.body
+
+        // Campos obligatorios
+        if (!nombre || !descripcion || !categoriaId || !locationId || !telefono) {
+            return res.status(400).json({
+                success: false,
+                message: 'nombre, descripcion, categoriaId, locationId y telefono son obligatorios'
+            })
+        }
+
+        // Longitud nombre
+        if (nombre.length > 100) {
+            return res.status(400).json({
+                success: false,
+                message: 'El nombre no puede tener más de 100 caracteres'
+            })
+        }
+
+        // Longitud descripción
+        if (descripcion.length > 500) {
+            return res.status(400).json({
+                success: false,
+                message: 'La descripción no puede superar los 500 caracteres'
+            })
+        }
+
+        // Validar teléfono
+        const phoneRegex = /^\d{7,15}$/
+        if (!phoneRegex.test(telefono)) {
+            return res.status(400).json({
+                success: false,
+                message: 'El teléfono debe contener entre 7 y 15 dígitos'
+            })
+        }
+
+        // Validar email si viene
+        if (email) {
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+            if (!emailRegex.test(email)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Formato de email inválido'
+                })
+            }
+
+        }
+
+        // Validar categoría existente
+        const categoria = await Category.findById(categoriaId)
+
+        if (!categoria) {
+            return res.status(400).json({
+                success: false,
+                message: 'La categoría no existe'
+            })
+        }
+
+        // Validar ubicación existente
+        const location = await Location.findById(locationId)
+
+        if (!location) {
+            return res.status(400).json({
+                success: false,
+                message: 'La ubicación no existe'
+            })
+        }
+
+        // Validar nombre único por proveedor
+        const usuarioId = req.user.uid
+
+        const existingService = await Service.findOne({
+            nombre,
+            usuarioId
         })
-    }
 
-    if (!descripcion || descripcion.trim().length === 0) {
-        return res.status(400).json({
+        if (existingService) {
+            return res.status(400).json({
+                success: false,
+                message: 'Ya tienes un servicio registrado con ese nombre'
+            })
+        }
+
+        next()
+
+    } catch (error) {
+
+        return res.status(500).json({
             success: false,
-            message: 'La descripción es obligatoria'
+            message: 'Error validando servicio',
+            error: error.message
         })
+
     }
-
-    if (!categoriaId) {
-        return res.status(400).json({
-            success: false,
-            message: 'La categoría es obligatoria'
-        })
-    }
-
-    if (!locationId) {
-    return res.status(400).json({
-        success: false,
-        message: 'La ubicación es obligatoria'
-    })
-}
-
-    if (!telefono || telefono.trim().length === 0) {
-        return res.status(400).json({
-            success: false,
-            message: 'El teléfono es obligatorio'
-        })
-    }
-
-    if (!usuarioId) {
-        return res.status(400).json({
-            success: false,
-            message: 'El usuario dueño es obligatorio'
-        })
-    }
-
-    next()
 }

@@ -15,6 +15,8 @@ import {
 } from './badges_controller.js'
 import { validateJWT } from '../../../middlewares/validate_jwt.js'
 import { requireRole } from '../../../middlewares/validate_role.js'
+import { badgeCreateValidator, badgeUpdateValidator } from '../../../middlewares/Badgesvalidator .js'
+
 
 const router = Router()
 
@@ -45,7 +47,7 @@ router.get('/:id/services', validateJWT, getServicesByBadge)
 
 // POST /badges
 // Crea una nueva insignia
-router.post('/', validateJWT, requireRole('ADMIN_ROLE'), createBadge)
+router.post('/', validateJWT, requireRole('ADMIN_ROLE'), badgeCreateValidator, createBadge)
 
 // POST /badges/auto-assign
 // Dispara auto-asignacion para un servicio especifico. Body: { serviceId }
@@ -61,7 +63,7 @@ router.post('/:id/assign', validateJWT, requireRole('ADMIN_ROLE'), assignBadgeTo
 
 // PUT /badges/:id
 // Actualiza datos de una insignia
-router.put('/:id', validateJWT, requireRole('ADMIN_ROLE'), updateBadge)
+router.put('/:id', validateJWT, requireRole('ADMIN_ROLE'), badgeUpdateValidator,  updateBadge)
 
 // DELETE /badges/:id/remove
 // Quita una insignia de un servicio. Body: { serviceId }

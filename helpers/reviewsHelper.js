@@ -24,14 +24,30 @@ export const updateServiceAverage = async (servicioId) => {
                 status: 'visible'
             }
         },
-        { $group: { _id: '$servicioId', promedio: { $avg: '$calificacion' } } }
+        {
+            $group: {
+                _id: '$servicioId',
+                promedio: { $avg: '$calificacion' },
+                totalReviews: { $sum: 1 }
+            }
+        }
     ])
 
     const promedio = result.length > 0
         ? parseFloat(result[0].promedio.toFixed(2))
         : 0
 
-    await Service.findByIdAndUpdate(servicioId, { promedioCalificacion: promedio })
+         const reviewsCount = result.length > 0
+        ? result[0].totalReviews
+        : 0
+
+    await Service.findByIdAndUpdate(
+        servicioId,
+         { promedioCalificacion: promedio ,
+            averageRating: promedio,
+            reviewsCount,
+            lastActivityAt: new Date()
+         })
 }
 
 /** Devuelve true si el usuario superó el límite de reseñas en la última hora */
