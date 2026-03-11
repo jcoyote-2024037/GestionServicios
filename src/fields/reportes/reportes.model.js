@@ -2,6 +2,8 @@
 
 import mongoose from 'mongoose'
 
+const UMBRAL_SUSPENSION = 5 // reportes pendientes para suspender automáticamente
+
 const reporteSchema = new mongoose.Schema(
     {
         servicioId: {
@@ -10,18 +12,13 @@ const reporteSchema = new mongoose.Schema(
             required: true
         },
         usuarioId: {
-            type: Number, // viene de PostgreSQL
+            type: Number,
             required: true
         },
+        // ── Campos originales ────────────────────────────────────────────────
         motivo: {
             type: String,
-            enum: [
-                'estafa',
-                'contenido_inapropiado',
-                'informacion_falsa',
-                'spam',
-                'otro'
-            ],
+            enum: ['estafa', 'contenido_inapropiado', 'informacion_falsa', 'spam', 'otro'],
             required: true
         },
         descripcion: {
@@ -30,6 +27,37 @@ const reporteSchema = new mongoose.Schema(
             trim: true,
             maxlength: 1000
         },
+        // ── Campos adicionales ───────────────────────────────────────────────
+        reportType: {
+            type: String,
+            enum: ['fraude', 'contenido_falso', 'spam', 'abuso'],
+            required: true
+        },
+        severity: {
+            type: String,
+            enum: ['low', 'medium', 'high', 'critical'],
+            default: 'medium'
+        },
+        status: {
+            type: String,
+            enum: ['pending', 'under_review', 'resolved', 'dismissed'],
+            default: 'pending'
+        },
+        resolution: {
+            type: String,
+            trim: true,
+            maxlength: 1000,
+            default: null
+        },
+        reviewedBy: {
+            type: Number,
+            default: null
+        },
+        reviewedAt: {
+            type: Date,
+            default: null
+        },
+        // ── Legacy (compatibilidad) ───────────────────────────────────────────
         estado: {
             type: String,
             enum: ['pendiente', 'revisado'],
@@ -40,7 +68,7 @@ const reporteSchema = new mongoose.Schema(
             default: Date.now
         },
         revisadoPor: {
-            type: Number, // usuarioId del admin que revisó
+            type: Number,
             default: null
         },
         fechaRevision: {
@@ -57,9 +85,12 @@ const reporteSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-// Índices para consultas frecuentes
 reporteSchema.index({ servicioId: 1 })
 reporteSchema.index({ usuarioId: 1 })
-reporteSchema.index({ estado: 1 })
+reporteSchema.index({ status: 1 })
+reporteSchema.index({ severity: 1 })
+reporteSchema.index({ reportType: 1 })
+
+reporteSchema.statics.UMBRAL_SUSPENSION = UMBRAL_SUSPENSION
 
 export default mongoose.model('Reporte', reporteSchema)
