@@ -1,56 +1,80 @@
-'use strict';
-import { Router } from 'express';
+'use strict'
+import { Router } from 'express'
 import {
-  createLocation,
-  getLocations,
-  getLocation,
-  updateLocation,
-  deleteLocation
-} from './location.controller.js';
-import { validateJWT } from '../../../middlewares/validate_jwt.js';
-import { requireRole } from '../../../middlewares/validate_role.js';
-import { locationValidator } from '../../../middlewares/locationValidator.js';
+    createLocation,
+    getLocations,
+    getLocation,
+    updateLocation,
+    deleteLocation,
+    getGeographicCenter,
+    getZoneDensity,
+    getDistance
+} from './location.controller.js'
+import { validateJWT }       from '../../../middlewares/validate_jwt.js'
+import { requireRole }       from '../../../middlewares/validate_role.js'
+import { locationValidator } from '../../../middlewares/locationValidator.js'
 
-const router = Router();
+const router = Router()
 
-// obtiene todas las locations, acepta filtros ?municipality= y ?department=
+// Obtiene todas las locations
 router.get(
     '/',
     validateJWT,
     getLocations
-);
+)
 
-// obtiene una location por id
+// Densidad de servicios por zona
+router.get(
+    '/zone-density',
+    validateJWT,
+    getZoneDensity
+)
+
+// Distancia entre dos ubicaciones: ?from=<id>&to=<id>
+router.get(
+    '/distance',
+    validateJWT,
+    getDistance
+)
+
+// Centro geográfico de una zona
+router.get(
+    '/:id/geographic-center',
+    validateJWT,
+    getGeographicCenter
+)
+
+// Obtiene una location por id
 router.get(
     '/:id',
     validateJWT,
     getLocation
-);
+)
 
-// crea una nueva location (solo admin)
+// Crea una nueva location (solo admin)
 router.post(
     '/',
     validateJWT,
     requireRole('ADMIN_ROLE'),
     locationValidator,
     createLocation
-);
+)
 
-// actualiza una location por id (solo admin)
+// Actualiza una location (solo admin)
 router.put(
     '/:id',
     validateJWT,
     requireRole('ADMIN_ROLE'),
     locationValidator,
     updateLocation
-);
+)
 
-// elimina una location por id - soft delete (solo admin)
+// Soft delete (solo admin)
 router.delete(
     '/:id',
     validateJWT,
     requireRole('ADMIN_ROLE'),
     deleteLocation
-);
+)
 
-export default router;
+export default router

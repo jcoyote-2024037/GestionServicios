@@ -44,7 +44,6 @@ router.post('/create', validateJWT, servicesValidator, createService)
  *         description: Lista de servicios
  */
 router.get('/', getServices)
-
 /**
  * @swagger
  * /services/{id}:
@@ -116,5 +115,4 @@ router.put('/update/:id', validateJWT, requireRole('ADMIN_ROLE'), servicesValida
  *         description: Servicio no encontrado
  */
 router.delete('/delete/:id', validateJWT, deleteService)
-
 export default router

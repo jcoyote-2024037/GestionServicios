@@ -49,6 +49,7 @@ export const getServices = async (req, res) => {
 
 // Obtener por ID
 export const getServiceById = async (req, res) => {
+
     try {
 
         const { id } = req.params
@@ -63,18 +64,26 @@ export const getServiceById = async (req, res) => {
             })
         }
 
+        service.viewsCount += 1
+        service.lastActivityAt = new Date()
+
+        await service.save()
+
         return res.status(200).json({
             success: true,
             service
         })
 
     } catch (error) {
+
         return res.status(500).json({
             success: false,
             message: 'Error al obtener servicio',
             error: error.message
         })
+
     }
+
 }
 
 // Actualizar
@@ -145,4 +154,54 @@ export const deleteService = async (req, res) => {
             error: error.message
         })
     }
+}
+
+export const getFeaturedServices = async (req,res)=>{
+
+    try{
+
+        const services = await Service.find({
+            isFeatured: true,
+            estado: 'activo'
+        })
+        .sort({ averageRating: -1 })
+
+        return res.status(200).json({
+            success:true,
+            services
+        })
+
+    }catch(error){
+
+        return res.status(500).json({
+            success:false,
+            message:'Error obteniendo servicios destacados'
+        })
+
+    }
+
+}
+
+export const getPopularServices = async (req,res)=>{
+
+    try{
+
+        const services = await Service.find({ estado:'activo' })
+        .sort({ viewsCount: -1 })
+        .limit(10)
+
+        return res.status(200).json({
+            success:true,
+            services
+        })
+
+    }catch(error){
+
+        return res.status(500).json({
+            success:false,
+            message:'Error obteniendo servicios populares'
+        })
+
+    }
+
 }

@@ -6,12 +6,26 @@ const tagSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        maxlength: 80,
+        maxlength: 30,
         unique: true
+    },
+    slug: {
+        type: String,
+        trim: true,
+        unique: true,
+        lowercase: true,
+        maxlength: 50,
+        index: true
     },
     description: {
         type: String,
-        trim: true
+        trim: true,
+        maxlength: 300
+    },
+    usageCount: {
+        type: Number,
+        default: 0,
+        min: 0
     },
     status: {
         type: Boolean,
