@@ -263,20 +263,17 @@ export const getGeographicCenter = async (req, res) => {
 // Densidad de servicios por zona: GET /api/locations/zone-density
 export const getZoneDensity = async (req, res) => {
     try {
-        const serviceCounts = await Service.aggregate([
-            { $match: { estado: 'activo' } },
-            { $group: { _id: '$locationId', serviceCount: { $sum: 1 } } }
-        ])
-
-        const countMap = {}
-        serviceCounts.forEach(({ _id, serviceCount }) => {
-            countMap[_id.toString()] = serviceCount
-        })
-
         const locations = await Location.find({ status: true })
 
-        const zones = locations.map(loc => {
-            const count = countMap[loc._id.toString()] || 0
+        const zones = await Promise.all(locations.map(async (loc) => {
+            const services = await Service.find({ 
+                locationId: loc._id, 
+                estado: 'activo' 
+            })
+            .populate('categoriaId', 'name')
+            .populate('tags', 'name slug')
+
+            const count = services.length
             let density = 'sin_servicios'
             if (count >= 10)     density = 'alta'
             else if (count >= 4) density = 'media'
@@ -288,9 +285,15 @@ export const getZoneDensity = async (req, res) => {
                 department:          loc.department,
                 serviceCount:        count,
                 density,
-                highDemandLowSupply: (loc.population || 0) > 10000 && count < 4
+                highDemandLowSupply: (loc.population || 0) > 10000 && count < 4,
+                services:            services.map(s => ({
+                    id:       s._id,
+                    nombre:   s.nombre,
+                    categoria: s.categoriaId,
+                    tags:     s.tags
+                }))
             }
-        })
+        }))
 
         zones.sort((a, b) => b.serviceCount - a.serviceCount)
 
