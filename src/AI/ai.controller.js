@@ -1,48 +1,58 @@
 'use strict'
 import { generarRespuesta } from './ai.service.js'
-// Importamos todas las entidades de tu captura
 import Service from '../fields/services/services.model.js'
 import Category from '../fields/categories/categories.model.js'
 import Review from '../fields/reviews/reviews.model.js'
-import Location from '../fields/location/location.model.js'
 
 export const chatWithAgent = async (req, res) => {
     try {
         const { message } = req.body
         if(!message) return res.status(400).json({ success: false, message: 'message es requerido' })
 
-        // 1. Obtenemos toda la data en paralelo para no perder tiempo
-        const [services, categories, reviews, locations] = await Promise.all([
-            Service.find().lean(),
-            Category.find().lean(),
-            Review.find().lean(),
-            Location.find().lean()
-        ])
+        const query = message.toLowerCase()
+        let dbContext = {}
 
-        // 2. Construimos un contexto masivo con todas las entidades
-        const context = `
-            Eres el asistente experto del "Directorio de Servicios de Guatemala". 
-            Tienes acceso a toda la base de datos del sistema:
+        // --- FILTRADO INTELIGENTE (Ahorro de Tokens) ---
+        if (query.includes('mejor') || query.includes('calificado') || query.includes('estrella')) {
+            // Solo traemos los servicios con sus reseñas para comparar
+            dbContext.reviews = await Review.find().limit(5).lean()
+            dbContext.services = await Service.find().sort({ rating: -1 }).limit(5).lean()
+        } 
+        else if (query.includes('categoría') || query.includes('que hay')) {
+            dbContext.categories = await Category.find().lean()
+        }
+        else {
+            // Busqueda general: solo traemos servicios básicos para no saturar
+            dbContext.services = await Service.find().limit(10).lean()
+        }
 
-            SERVICIOS DISPONIBLES: ${JSON.stringify(services)}
-            CATEGORÍAS: ${JSON.stringify(categories)}
-            RESEÑAS Y CALIFICACIONES: ${JSON.stringify(reviews)}
-            UBICACIONES: ${JSON.stringify(locations)}
+        // --- SYSTEM PROMPT ESTRICTO (Formato JSON) ---
+        const systemPrompt = `
+            Eres el asistente del "Directorio de Servicios de Guatemala".
+            USA ESTA DATA PARA RESPONDER: ${JSON.stringify(dbContext)}
 
-            REGLAS DE RESPUESTA:
-            1. Si piden "los mejores", busca en RESEÑAS y cruza los datos con SERVICIOS.
-            2. Si piden servicios por zona, busca en UBICACIONES.
-            3. Si piden categorías, usa la lista de CATEGORÍAS.
-            4. Si algo NO existe en estas listas, di: "No cuento con esa información en el directorio".
-            5. Responde de forma amable y profesional.
+            INSTRUCCIONES OBLIGATORIAS:
+            1. Responde ÚNICAMENTE en formato JSON.
+            2. Si no encuentras algo, pon "hay_resultados": false.
+            3. Si encuentras algo, pon los detalles en "lista_resultados".
+
+            ESTRUCTURA DEL JSON:
+            {
+              "mensaje_ia": "Texto amable de respuesta",
+              "hay_resultados": boolean,
+              "lista_resultados": [],
+              "sugerencia": "Consejo adicional"
+            }
         `
 
-        const fullPrompt = `${context}\n\nPregunta del usuario: ${message}`
-        const response = await generarRespuesta(fullPrompt)
+        const responseText = await generarRespuesta(`${systemPrompt}\n\nUsuario: ${message}`)
+        
+        // Intentamos parsear la respuesta para asegurar que sea JSON puro
+        const jsonResponse = JSON.parse(responseText.replace(/```json|```/g, ""))
 
         return res.json({
             success: true,
-            response
+            ...jsonResponse
         })
 
     } catch (error) {
