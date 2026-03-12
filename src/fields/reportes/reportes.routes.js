@@ -13,7 +13,7 @@ import {
 
 import { validateJWT } from '../../../middlewares/validate_jwt.js'
 import { requireRole } from '../../../middlewares/validate_role.js'
-import { reportesValidator } from '../../../middlewares/reportesValidator.js'
+import { reportesValidator, revisarReporteValidator } from '../../../middlewares/reportesValidator.js'
 
 const router = Router()
 
@@ -30,7 +30,7 @@ router.get('/:id',                        requireRole('ADMIN_ROLE'), getReporteB
 router.put('/update/:id',                 requireRole('ADMIN_ROLE'), updateReporte)
 router.delete('/delete/:id',              requireRole('ADMIN_ROLE'), deleteReporte)
 
-// Marcar como revisado (admin) — desactiva el servicio también
-router.patch('/revisar/:id',              requireRole('ADMIN_ROLE'), marcarComoRevisado)
+// Revisar reporte (admin) — resuelve o desestima + desactiva servicio si resolved
+router.patch('/revisar/:id',              requireRole('ADMIN_ROLE'), revisarReporteValidator, marcarComoRevisado)
 
 export default router

@@ -2,9 +2,15 @@
 
 import { Router } from 'express'
 import {
-    createSolicitud, getSolicitudes, getSolicitudById,
-    updateSolicitud, deleteSolicitud, cambiarEstado,
-    getHistorialPorUsuario, getHistorialPorServicio
+    createSolicitud,
+    getSolicitudes,
+    getSolicitudById,
+    updateSolicitud,
+    deleteSolicitud,
+    cambiarEstado,
+    getHistorialPorUsuario,
+    getHistorialPorServicio,
+    expirarSolicitudes
 } from './solicitudes.controller.js'
 import { validateJWT }  from '../../../middlewares/validate_jwt.js'
 import { requireRole }  from '../../../middlewares/validate_role.js'
@@ -184,5 +190,8 @@ router.get('/historial/usuario/:usuarioId', getHistorialPorUsuario)
  *         description: Historial del servicio
  */
 router.get('/historial/servicio/:servicioId', getHistorialPorServicio)
+
+// Expiración automática (admin / cron)
+router.post('/expirar', requireRole('ADMIN_ROLE'), expirarSolicitudes)
 
 export default router
