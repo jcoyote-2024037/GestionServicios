@@ -21,6 +21,16 @@ const favoriteSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    // Última vez que el usuario interactuó con este favorito
+    lastInteractionAt: {
+        type: Date,
+        default: Date.now
+    },
+    // Marcado automáticamente si no hubo interacción en 90 días
+    abandonado: {
+        type: Boolean,
+        default: false
+    },
     fecha: {
         type: Date,
         default: Date.now
@@ -29,5 +39,7 @@ const favoriteSchema = new mongoose.Schema({
 
 favoriteSchema.index({ usuarioId: 1, servicioId: 1 }, { unique: true });
 favoriteSchema.index({ servicioId: 1 });
+favoriteSchema.index({ usuarioId: 1 });
+favoriteSchema.index({ lastInteractionAt: 1 });
 
 export default mongoose.model('Favorite', favoriteSchema);

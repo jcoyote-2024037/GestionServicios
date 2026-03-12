@@ -11,12 +11,13 @@ import User from '../user/user.model.js';
    EMAIL TEMPLATES
 =========================== */
 
-const emailBase = ({ title, preheader, bodyContent }) => `
+const emailBase = ({ title, preheader, bodyContent, accentColor = '#0057FF', accentLight = '#EEF3FF' }) => `
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <title>${title}</title>
   <!--[if mso]>
   <noscript>
@@ -24,214 +25,379 @@ const emailBase = ({ title, preheader, bodyContent }) => `
   </noscript>
   <![endif]-->
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap');
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: 'DM Sans', Arial, sans-serif;
-      background-color: #0f0d0a;
-      color: #e8e0d0;
+      font-family: 'Sora', 'Segoe UI', Arial, sans-serif;
+      background-color: #F0F4F8;
+      color: #1A2333;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-    .wrapper {
-      background-color: #0f0d0a;
-      padding: 48px 20px;
+
+    .email-wrapper {
+      background-color: #E8EDF4;
+      background-image:
+        radial-gradient(ellipse at 20% 0%, rgba(0, 87, 255, 0.07) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(0, 180, 120, 0.06) 0%, transparent 60%);
+      padding: 48px 16px 64px;
       min-height: 100vh;
     }
-    .container {
-      max-width: 560px;
+
+    .email-container {
+      max-width: 580px;
       margin: 0 auto;
-      background-color: #1a1710;
-      border: 1px solid #3a3020;
-      border-radius: 4px;
+      background-color: #FFFFFF;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow:
+        0 4px 6px rgba(26, 35, 51, 0.05),
+        0 20px 60px rgba(26, 35, 51, 0.12),
+        0 0 0 1px rgba(26, 35, 51, 0.06);
+    }
+
+    /* ── HEADER BAND ── */
+    .header-band {
+      height: 6px;
+      background: linear-gradient(90deg, #0038CC 0%, ${accentColor} 40%, #00C27A 100%);
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background-color: #0D1B36;
+      background-image:
+        radial-gradient(ellipse at 100% 0%, rgba(0, 87, 255, 0.25) 0%, transparent 55%),
+        radial-gradient(ellipse at 0% 100%, rgba(0, 194, 122, 0.12) 0%, transparent 55%);
+      padding: 36px 48px 32px;
+      position: relative;
       overflow: hidden;
     }
-    /* Header */
-    .header {
-      background: linear-gradient(135deg, #1a1710 0%, #2a2218 50%, #1a1710 100%);
-      padding: 40px 48px 32px;
-      border-bottom: 1px solid #3a3020;
-      position: relative;
-      text-align: center;
-    }
-    .header::before {
+
+    .header::after {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #c9a84c, #e8c96e, #c9a84c, transparent);
+      bottom: -1px; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 87, 255, 0.4), rgba(0, 194, 122, 0.4), transparent);
     }
-    .logo-icon {
-      display: inline-block;
-      width: 52px;
-      height: 52px;
-      margin-bottom: 16px;
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
+
+    .logo-box {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, ${accentColor} 0%, #0038CC 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(0, 87, 255, 0.4);
+    }
+
+    .brand-block {}
+
     .brand-name {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 22px;
+      font-family: 'Sora', sans-serif;
+      font-size: 17px;
       font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      line-height: 1.2;
+    }
+
+    .brand-tagline {
+      font-size: 11px;
+      font-weight: 400;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #c9a84c;
+      color: rgba(255,255,255,0.38);
+      margin-top: 3px;
     }
-    .brand-sub {
+
+    .header-badge {
+      margin-left: auto;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      padding: 5px 14px;
       font-size: 11px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: #6a5e40;
-      margin-top: 4px;
-      font-weight: 300;
-    }
-    /* Divider */
-    .gold-divider {
-      text-align: center;
-      padding: 0;
-      margin: 0;
-      line-height: 0;
-    }
-    .gold-divider span {
-      display: inline-block;
-      width: 48px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
-      vertical-align: middle;
-      margin: 0 8px;
-    }
-    .gold-divider::before, .gold-divider::after {
-      content: '◆';
-      font-size: 6px;
-      color: #c9a84c;
-    }
-    /* Body */
-    .body {
-      padding: 40px 48px;
-    }
-    .greeting {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 26px;
       font-weight: 500;
-      color: #f0e8d8;
-      margin-bottom: 16px;
-      line-height: 1.3;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
     }
+
+    /* ── BODY ── */
+    .body {
+      padding: 44px 48px 40px;
+    }
+
+    .label-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background-color: ${accentLight};
+      border: 1px solid ${accentColor}22;
+      border-radius: 100px;
+      padding: 5px 13px 5px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: ${accentColor};
+      margin-bottom: 20px;
+    }
+
+    .label-dot {
+      width: 6px; height: 6px;
+      background-color: ${accentColor};
+      border-radius: 50%;
+    }
+
+    .greeting {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: #0D1B36;
+      line-height: 1.25;
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+
+    .greeting em {
+      font-style: italic;
+      color: ${accentColor};
+    }
+
     .message {
       font-size: 15px;
-      color: #9a8e74;
-      line-height: 1.8;
-      font-weight: 300;
-      margin-bottom: 32px;
+      color: #4A5568;
+      line-height: 1.85;
+      font-weight: 400;
+      margin-bottom: 8px;
     }
+
     .message strong {
-      color: #c9a84c;
-      font-weight: 500;
+      color: #0D1B36;
+      font-weight: 600;
     }
-    /* CTA Button */
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      margin: 32px 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #E2E8F0 20%, #E2E8F0 80%, transparent);
+    }
+
+    /* ── CTA BUTTON ── */
     .btn-wrapper {
       text-align: center;
-      margin: 36px 0;
+      margin: 36px 0 28px;
     }
+
+    .btn-outer {
+      display: inline-block;
+      background: linear-gradient(135deg, ${accentColor} 0%, #0038CC 100%);
+      border-radius: 8px;
+      padding: 2px;
+      box-shadow: 0 8px 24px rgba(0, 87, 255, 0.35), 0 2px 6px rgba(0, 87, 255, 0.2);
+      text-decoration: none;
+    }
+
     .btn {
       display: inline-block;
-      background: linear-gradient(135deg, #c9a84c 0%, #e8c96e 50%, #c9a84c 100%);
-      color: #0f0d0a !important;
+      background: linear-gradient(135deg, ${accentColor} 0%, #0038CC 100%);
+      color: #FFFFFF !important;
       text-decoration: none;
-      font-family: 'DM Sans', Arial, sans-serif;
+      font-family: 'Sora', Arial, sans-serif;
       font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.2em;
+      font-weight: 600;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      padding: 16px 40px;
-      border-radius: 2px;
+      padding: 16px 44px;
+      border-radius: 7px;
     }
-    /* Fallback link */
+
+    /* ── FALLBACK LINK BOX ── */
     .fallback {
-      background-color: #141210;
-      border: 1px solid #2a2218;
-      border-radius: 2px;
+      background-color: #F7F9FC;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
       padding: 16px 20px;
-      margin-top: 24px;
+      margin-top: 8px;
     }
-    .fallback p {
-      font-size: 12px;
-      color: #6a5e40;
+
+    .fallback-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #94A3B8;
       margin-bottom: 8px;
-      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
+
     .fallback a {
       font-size: 12px;
-      color: #9a8e74;
+      color: ${accentColor};
       word-break: break-all;
-      line-height: 1.6;
+      line-height: 1.7;
+      text-decoration: none;
+      font-weight: 500;
     }
-    /* Expiry notice */
+
+    /* ── NOTICE CARD ── */
     .notice {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      background-color: #141210;
-      border-left: 2px solid #c9a84c;
-      padding: 14px 18px;
-      border-radius: 0 2px 2px 0;
+      gap: 14px;
+      background: linear-gradient(135deg, #FFF8EC, #FFFBF3);
+      border: 1px solid #F0D080;
+      border-left: 3px solid #F0B429;
+      border-radius: 8px;
+      padding: 16px 18px;
       margin-top: 28px;
     }
-    .notice-icon {
-      font-size: 14px;
+
+    .notice-icon-wrap {
+      width: 28px;
+      height: 28px;
+      background-color: #FEF3C7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
-      margin-top: 1px;
     }
+
     .notice p {
       font-size: 13px;
-      color: #7a6e54;
-      line-height: 1.6;
+      color: #7A5E18;
+      line-height: 1.65;
+      font-weight: 400;
     }
-    /* Footer */
+
+    .notice p strong {
+      color: #92400E;
+      font-weight: 600;
+    }
+
+    /* ── STATS ROW (decorative trust signals) ── */
+    .trust-row {
+      display: flex;
+      gap: 0;
+      margin: 32px 0 0;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .trust-item {
+      flex: 1;
+      padding: 16px 14px;
+      text-align: center;
+      border-right: 1px solid #E2E8F0;
+    }
+
+    .trust-item:last-child { border-right: none; }
+
+    .trust-icon {
+      font-size: 18px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .trust-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: #94A3B8;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── FOOTER ── */
     .footer {
-      border-top: 1px solid #2a2218;
-      padding: 28px 48px;
+      background-color: #F7F9FC;
+      border-top: 1px solid #E2E8F0;
+      padding: 28px 48px 32px;
       text-align: center;
     }
+
+    .footer-logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .footer-logo-dot {
+      width: 8px; height: 8px;
+      background: linear-gradient(135deg, ${accentColor}, #0038CC);
+      border-radius: 50%;
+    }
+
+    .footer-brand {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #94A3B8;
+    }
+
     .footer p {
       font-size: 12px;
-      color: #4a4030;
-      line-height: 1.7;
-      letter-spacing: 0.02em;
+      color: #94A3B8;
+      line-height: 1.75;
     }
+
     .footer a {
-      color: #6a5e40;
-      text-decoration: none;
+      color: #64748B;
+      text-decoration: underline;
+      text-decoration-color: #CBD5E1;
     }
-    .footer-ornament {
-      margin-bottom: 16px;
-      color: #3a3020;
-      letter-spacing: 0.4em;
-      font-size: 10px;
+
+    .footer-divider {
+      width: 40px;
+      height: 1px;
+      background: #E2E8F0;
+      margin: 14px auto;
     }
   </style>
 </head>
 <body>
-  <span style="display:none;max-height:0;overflow:hidden;">${preheader}</span>
-  <div class="wrapper">
-    <div class="container">
+  <span style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${preheader}</span>
+
+  <div class="email-wrapper">
+    <div class="email-container">
+
+      <!-- TOP COLOR BAND -->
+      <div class="header-band"></div>
 
       <!-- HEADER -->
       <div class="header">
-        <div>
-          <!-- SVG Fork & Knife icon -->
-          <svg class="logo-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="26" cy="26" r="25" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
-            <circle cx="26" cy="26" r="21" stroke="#c9a84c" stroke-width="0.5" opacity="0.2"/>
-            <!-- Fork -->
-            <line x1="18" y1="14" x2="18" y2="24" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="15" y1="14" x2="15" y2="20" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="21" y1="14" x2="21" y2="20" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M15 20 Q18 23 21 20" stroke="#c9a84c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <line x1="18" y1="24" x2="18" y2="38" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
-            <!-- Knife -->
-            <path d="M34 14 Q37 20 37 26 L34 26 L34 38" stroke="#c9a84c" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+        <div class="header-inner">
+          <div class="logo-box">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13 3L4 8V13C4 17.97 7.84 22.57 13 24C18.16 22.57 22 17.97 22 13V8L13 3Z" stroke="white" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+              <path d="M9 13L11.5 15.5L17 10" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="brand-block">
+            <div class="brand-name">Gestión Servicios</div>
+            <div class="brand-tagline">Sistema de Administración</div>
+          </div>
+          <div class="header-badge">Seguro</div>
         </div>
-        <div class="brand-name">Gestión Servicios</div>
-        <div class="brand-sub">Sistema de Administración</div>
       </div>
 
       <!-- BODY -->
@@ -241,14 +407,15 @@ const emailBase = ({ title, preheader, bodyContent }) => `
 
       <!-- FOOTER -->
       <div class="footer">
-        <div class="footer-ornament">· · · · · · ·</div>
-        <p>
-          Este correo fue enviado automáticamente. Por favor no respondas a este mensaje.<br/>
-          Si no solicitaste esto, puedes ignorar este correo de forma segura.
-        </p>
-        <p style="margin-top:10px;">
-          &copy; ${new Date().getFullYear()} Gestión Servicios. Todos los derechos reservados.
-        </p>
+        <div class="footer-logo-row">
+          <div class="footer-logo-dot"></div>
+          <div class="footer-brand">Gestión Servicios</div>
+          <div class="footer-logo-dot"></div>
+        </div>
+        <p>Este correo fue enviado de forma automática. Por favor, no respondas a este mensaje.</p>
+        <p>Si no realizaste esta acción, puedes ignorar este correo con seguridad.</p>
+        <div class="footer-divider"></div>
+        <p>&copy; ${new Date().getFullYear()} Gestión Servicios &nbsp;·&nbsp; Todos los derechos reservados.</p>
       </div>
 
     </div>
@@ -257,80 +424,162 @@ const emailBase = ({ title, preheader, bodyContent }) => `
 </html>
 `;
 
+
+/* ── VERIFY EMAIL TEMPLATE ── */
 const verifyEmailTemplate = (verifyLink) => emailBase({
     title: 'Verifica tu cuenta',
-    preheader: 'Un paso más para acceder a tu cuenta. Verifica tu correo electrónico.',
+    preheader: 'Un paso más para activar tu acceso al sistema. Verifica tu correo electrónico ahora.',
+    accentColor: '#0057FF',
+    accentLight: '#EEF3FF',
     bodyContent: `
-      <h2 class="greeting">Bienvenido al equipo</h2>
+      <div class="label-tag">
+        <span class="label-dot"></span>
+        Activación de cuenta
+      </div>
+
+      <h2 class="greeting">Bienvenido al<br/><em>sistema</em></h2>
+
       <p class="message">
-        Gracias por registrarte en <strong>Gestión Servicios</strong>. Tu cuenta ha sido creada exitosamente.<br/><br/>
-        Para comenzar a utilizar el sistema, necesitas confirmar tu dirección de correo electrónico. Este paso garantiza la seguridad de tu cuenta.
+        Tu cuenta en <strong>Gestión Servicios</strong> ha sido creada exitosamente.
+        Para activar tu acceso y comenzar a utilizar el sistema, necesitas confirmar
+        tu dirección de correo electrónico.
       </p>
 
       <div class="btn-wrapper">
-        <a href="${verifyLink}" class="btn">Verificar mi cuenta</a>
+        <a href="${verifyLink}" class="btn-outer">
+          <span class="btn">Verificar mi cuenta</span>
+        </a>
       </div>
 
       <div class="fallback">
-        <p>¿El botón no funciona? Copia y pega este enlace en tu navegador:</p>
+        <div class="fallback-label">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 3.5V6C11 8.76 8.76 10.9 6 11.5C3.24 10.9 1 8.76 1 6V3.5L6 1Z" stroke="#94A3B8" stroke-width="1" fill="none"/></svg>
+          Enlace alternativo
+        </div>
         <a href="${verifyLink}">${verifyLink}</a>
       </div>
 
+      <div class="trust-row">
+        <div class="trust-item">
+          <span class="trust-icon">🔐</span>
+          <div class="trust-label">Enlace seguro</div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">✉️</span>
+          <div class="trust-label">Un solo uso</div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">♾️</span>
+          <div class="trust-label">Sin expiración</div>
+        </div>
+      </div>
+
       <div class="notice">
-        <span class="notice-icon">◇</span>
-        <p>Este enlace es de un solo uso y no tiene fecha de expiración. Si ya verificaste tu cuenta, puedes ignorar este mensaje.</p>
+        <div class="notice-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 4V7C13 10.31 10.31 13 7 14C3.69 13 1 10.31 1 7V4L7 1Z" stroke="#F0B429" stroke-width="1.3" fill="none"/><path d="M7 5V7.5M7 9.5V10" stroke="#F0B429" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <p>Este enlace es de <strong>un solo uso</strong>. Si ya verificaste tu cuenta, puedes ignorar este mensaje de forma segura.</p>
       </div>
     `
 });
 
+
+/* ── RESEND VERIFICATION TEMPLATE ── */
 const resendVerificationTemplate = (verifyLink) => emailBase({
-    title: 'Reenvío de verificación',
+    title: 'Nuevo enlace de verificación',
     preheader: 'Has solicitado un nuevo enlace de verificación para tu cuenta.',
+    accentColor: '#0057FF',
+    accentLight: '#EEF3FF',
     bodyContent: `
-      <h2 class="greeting">Nuevo enlace<br/>de verificación</h2>
+      <div class="label-tag">
+        <span class="label-dot"></span>
+        Reenvío de verificación
+      </div>
+
+      <h2 class="greeting">Nuevo enlace<br/><em>generado</em></h2>
+
       <p class="message">
-        Has solicitado un nuevo enlace para verificar tu cuenta en <strong>Gestión Servicios</strong>.<br/><br/>
-        Haz clic en el botón de abajo para confirmar tu dirección de correo y activar tu acceso al sistema.
+        Has solicitado un nuevo enlace de verificación para tu cuenta en <strong>Gestión Servicios</strong>.
+        Haz clic en el botón de abajo para confirmar tu correo y activar tu acceso.
       </p>
 
       <div class="btn-wrapper">
-        <a href="${verifyLink}" class="btn">Verificar mi cuenta</a>
+        <a href="${verifyLink}" class="btn-outer">
+          <span class="btn">Verificar mi cuenta</span>
+        </a>
       </div>
 
       <div class="fallback">
-        <p>¿El botón no funciona? Copia y pega este enlace en tu navegador:</p>
+        <div class="fallback-label">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 3.5V6C11 8.76 8.76 10.9 6 11.5C3.24 10.9 1 8.76 1 6V3.5L6 1Z" stroke="#94A3B8" stroke-width="1" fill="none"/></svg>
+          Enlace alternativo
+        </div>
         <a href="${verifyLink}">${verifyLink}</a>
       </div>
 
       <div class="notice">
-        <span class="notice-icon">◇</span>
-        <p>Si no solicitaste este correo, alguien puede haber ingresado tu dirección por error. Puedes ignorarlo con seguridad.</p>
+        <div class="notice-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 4V7C13 10.31 10.31 13 7 14C3.69 13 1 10.31 1 7V4L7 1Z" stroke="#F0B429" stroke-width="1.3" fill="none"/><path d="M7 5V7.5M7 9.5V10" stroke="#F0B429" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <p>Si <strong>no solicitaste</strong> este correo, alguien pudo haber ingresado tu dirección por error. Puedes ignorarlo con seguridad.</p>
       </div>
     `
 });
 
+
+/* ── RESET PASSWORD TEMPLATE ── */
 const resetPasswordTemplate = (resetLink) => emailBase({
     title: 'Recuperación de contraseña',
     preheader: 'Recibimos una solicitud para restablecer la contraseña de tu cuenta.',
+    accentColor: '#0057FF',
+    accentLight: '#EEF3FF',
     bodyContent: `
-      <h2 class="greeting">¿Olvidaste tu<br/>contraseña?</h2>
+      <div class="label-tag" style="background-color:#FFF1F2; border-color:#FFE4E6; color:#E11D48;">
+        <span class="label-dot" style="background-color:#E11D48;"></span>
+        Seguridad de cuenta
+      </div>
+
+      <h2 class="greeting">¿Olvidaste tu<br/><em style="color:#E11D48;">contraseña?</em></h2>
+
       <p class="message">
-        Recibimos una solicitud para restablecer la contraseña de tu cuenta en <strong>Gestión Servicios</strong>.<br/><br/>
-        Haz clic en el botón de abajo para crear una nueva contraseña. Si no realizaste esta solicitud, puedes ignorar este correo.
+        Recibimos una solicitud para restablecer la contraseña de tu cuenta en <strong>Gestión Servicios</strong>.
+        Haz clic en el botón de abajo para crear una nueva contraseña de forma segura.
       </p>
 
       <div class="btn-wrapper">
-        <a href="${resetLink}" class="btn">Restablecer contraseña</a>
+        <a href="${resetLink}" style="display:inline-block; background:linear-gradient(135deg,#E11D48 0%,#9F1239 100%); border-radius:8px; padding:2px; box-shadow:0 8px 24px rgba(225,29,72,0.35); text-decoration:none;">
+          <span style="display:inline-block; background:linear-gradient(135deg,#E11D48 0%,#9F1239 100%); color:#FFFFFF; font-family:'Sora',Arial,sans-serif; font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; padding:16px 44px; border-radius:7px; text-decoration:none;">Restablecer contraseña</span>
+        </a>
       </div>
 
       <div class="fallback">
-        <p>¿El botón no funciona? Copia y pega este enlace en tu navegador:</p>
-        <a href="${resetLink}">${resetLink}</a>
+        <div class="fallback-label">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 3.5V6C11 8.76 8.76 10.9 6 11.5C3.24 10.9 1 8.76 1 6V3.5L6 1Z" stroke="#94A3B8" stroke-width="1" fill="none"/></svg>
+          Enlace alternativo
+        </div>
+        <a href="${resetLink}" style="color:#E11D48;">${resetLink}</a>
+      </div>
+
+      <div class="trust-row">
+        <div class="trust-item">
+          <span class="trust-icon">⏱️</span>
+          <div class="trust-label">Expira en 1 hora</div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">🔒</span>
+          <div class="trust-label">Enlace único</div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">🛡️</span>
+          <div class="trust-label">Cifrado seguro</div>
+        </div>
       </div>
 
       <div class="notice">
-        <span class="notice-icon">◇</span>
-        <p>Este enlace expirará en <strong style="color:#c9a84c;">1 hora</strong> por razones de seguridad. Si necesitas uno nuevo, solicita otro restablecimiento desde la página de inicio de sesión.</p>
+        <div class="notice-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 4V7C13 10.31 10.31 13 7 14C3.69 13 1 10.31 1 7V4L7 1Z" stroke="#F0B429" stroke-width="1.3" fill="none"/><path d="M7 5V7.5M7 9.5V10" stroke="#F0B429" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <p>Este enlace expirará en <strong>1 hora</strong>. Si no realizaste esta solicitud, ignora este correo. Tu contraseña actual permanece sin cambios.</p>
       </div>
     `
 });
@@ -386,7 +635,7 @@ export const register = async (req, res) => {
 
         await transporter.sendMail({
             to: email,
-            subject: 'Verifica tu cuenta — MyService GT',
+            subject: 'Verifica tu cuenta — Gestión Servicios',
             html: verifyEmailTemplate(verifyLink)
         });
 
@@ -559,7 +808,7 @@ export const resendVerification = async (req, res) => {
 
         await transporter.sendMail({
             to: user.email,
-            subject: 'Nuevo enlace de verificación — MyService GT',
+            subject: 'Nuevo enlace de verificación — Gestión Servicios',
             html: resendVerificationTemplate(verifyLink)
         });
 
@@ -615,7 +864,7 @@ export const requestPasswordReset = async (req, res) => {
 
         await transporter.sendMail({
             to: user.email,
-            subject: 'Recuperación de contraseña — MyService GT',
+            subject: 'Recuperación de contraseña — Gestión Servicios',
             html: resetPasswordTemplate(resetLink)
         });
 

@@ -2,10 +2,18 @@
 
 import Favorite from './favorites.model.js'
 import Service from '../services/services.model.js'
-import { syncFavoritesCount } from '../../../helpers/favoritesHelper.js'
+import {
+    syncFavoritesCount,
+    verificarLimiteFavoritos,
+    servicioEstaActivo,
+    generarRecomendaciones,
+    calcularPopularidad,
+    detectarFavoritosAbandonados,
+    registrarInteraccion
+} from '../../../helpers/favoritesHelper.js'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CONTROLLERS
+// CREAR FAVORITO
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const createFavorite = async (req, res) => {
@@ -16,10 +24,23 @@ export const createFavorite = async (req, res) => {
         if (!service)
             return res.status(404).json({ success: false, message: 'Servicio no encontrado' })
 
+        // No permitir agregar servicios suspendidos
+        if (!(await servicioEstaActivo(servicioId)))
+            return res.status(403).json({ success: false, message: 'No puedes agregar un servicio suspendido o inactivo a favoritos' })
+
+        // Límite de 200 favoritos por usuario
+        if (await verificarLimiteFavoritos(usuarioId))
+            return res.status(403).json({
+                success: false,
+                message: 'Has alcanzado el límite máximo de 200 favoritos. Elimina algunos para continuar.'
+            })
+
         const favorite = new Favorite({
-            usuarioId, servicioId,
+            usuarioId,
+            servicioId: servicioId.toString().trim(),
             notes: notes || null,
-            notificationEnabled: notificationEnabled || false
+            notificationEnabled: notificationEnabled || false,
+            lastInteractionAt: new Date()
         })
 
         await favorite.save()
@@ -33,6 +54,10 @@ export const createFavorite = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Error al agregar favorito', error: error.message })
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONSULTAS
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const getFavorites = async (req, res) => {
     try {
@@ -64,7 +89,14 @@ export const getFavoriteById = async (req, res) => {
 
 export const getFavoritesByUser = async (req, res) => {
     try {
-        const favorites = await Favorite.find({ usuarioId: Number(req.params.usuarioId) })
+        const usuarioId = Number(req.params.usuarioId)
+        const { soloActivos, soloAbandonados } = req.query
+
+        const filter = { usuarioId }
+        if (soloAbandonados === 'true') filter.abandonado = true
+        else if (soloActivos === 'true') filter.abandonado = false
+
+        const favorites = await Favorite.find(filter)
             .populate('servicioId', 'nombre descripcion ubicacion promedioCalificacion estado favoritosCount categoriaId')
             .sort({ createdAt: -1 })
 
@@ -92,26 +124,15 @@ export const countFavoritesByService = async (req, res) => {
     }
 }
 
-export const deleteFavorite = async (req, res) => {
-    try {
-        const favorite = await Favorite.findByIdAndDelete(req.params.id)
-        if (!favorite)
-            return res.status(404).json({ success: false, message: 'Favorito no encontrado' })
-
-        await syncFavoritesCount(favorite.servicioId)
-
-        return res.status(200).json({ success: true, message: 'Favorito eliminado correctamente' })
-
-    } catch (error) {
-        return res.status(500).json({ success: false, message: 'Error al eliminar favorito', error: error.message })
-    }
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// ACTUALIZAR / ELIMINAR
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const updateFavorite = async (req, res) => {
     try {
         const { notes, notificationEnabled } = req.body
 
-        const update = {}
+        const update = { lastInteractionAt: new Date(), abandonado: false }
         if (notes !== undefined) update.notes = notes
         if (notificationEnabled !== undefined) update.notificationEnabled = notificationEnabled
 
@@ -128,41 +149,89 @@ export const updateFavorite = async (req, res) => {
     }
 }
 
+export const deleteFavorite = async (req, res) => {
+    try {
+        const favorite = await Favorite.findByIdAndDelete(req.params.id)
+        if (!favorite)
+            return res.status(404).json({ success: false, message: 'Favorito no encontrado' })
+
+        await syncFavoritesCount(favorite.servicioId)
+
+        return res.status(200).json({ success: true, message: 'Favorito eliminado correctamente' })
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Error al eliminar favorito', error: error.message })
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SUGERENCIAS Y POPULARIDAD
+// ─────────────────────────────────────────────────────────────────────────────
+
 export const getSuggestions = async (req, res) => {
     try {
         const uid = Number(req.params.usuarioId)
+        const suggestions = await generarRecomendaciones(uid)
 
-        const userFavorites = await Favorite.find({ usuarioId: uid }).select('servicioId')
-        const favServiceIds = userFavorites.map(f => f.servicioId)
-
-        if (favServiceIds.length === 0)
+        if (suggestions.length === 0)
             return res.status(200).json({
                 success: true,
-                message: 'Aún no tienes favoritos. Agrega servicios para recibir sugerencias.',
+                message: 'Aún no tienes favoritos o no hay sugerencias disponibles.',
                 suggestions: []
             })
 
-        // Obtener categorías de los servicios favoritos
-        const favServices = await Service.find({ _id: { $in: favServiceIds } }).select('categoriaId')
-        const categoryIds = [...new Set(favServices.map(s => s.categoriaId?.toString()).filter(Boolean))]
-
-        // Sugerir servicios activos de las mismas categorías que no estén en favoritos
-        const suggestions = await Service.find({
-            categoriaId: { $in: categoryIds },
-            _id: { $nin: favServiceIds },
-            estado: 'activo'
-        })
-            .limit(10)
-            .select('nombre descripcion promedioCalificacion categoriaId locationId favoritosCount')
-
-        return res.status(200).json({
-            success: true,
-            total: suggestions.length,
-            basadoEn: favServiceIds.length,
-            suggestions
-        })
+        return res.status(200).json({ success: true, total: suggestions.length, suggestions })
 
     } catch (error) {
         return res.status(500).json({ success: false, message: 'Error al obtener sugerencias', error: error.message })
+    }
+}
+
+export const getServicePopularity = async (req, res) => {
+    try {
+        const { servicioId } = req.params
+
+        const service = await Service.findById(servicioId)
+        if (!service)
+            return res.status(404).json({ success: false, message: 'Servicio no encontrado' })
+
+        const popularidad = await calcularPopularidad(servicioId)
+
+        return res.status(200).json({ success: true, servicioId, ...popularidad })
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Error al calcular popularidad', error: error.message })
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INTERACCIÓN Y TAREA ADMINISTRATIVA
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const trackInteraction = async (req, res) => {
+    try {
+        const favorite = await Favorite.findById(req.params.id)
+        if (!favorite)
+            return res.status(404).json({ success: false, message: 'Favorito no encontrado' })
+
+        await registrarInteraccion(req.params.id)
+
+        return res.status(200).json({ success: true, message: 'Interacción registrada correctamente' })
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Error al registrar interacción', error: error.message })
+    }
+}
+
+export const runAbandonedCheck = async (req, res) => {
+    try {
+        const cantidad = await detectarFavoritosAbandonados()
+        return res.status(200).json({
+            success: true,
+            message: `Revisión completada. ${cantidad} favorito(s) marcado(s) como abandonados.`,
+            marcados: cantidad
+        })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Error al detectar favoritos abandonados', error: error.message })
     }
 }

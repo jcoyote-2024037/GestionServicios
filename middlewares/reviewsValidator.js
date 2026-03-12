@@ -1,5 +1,7 @@
 'use strict'
 
+const REGEX_LINKS = /https?:\/\/[^\s]+|www\.[^\s]+|\b[a-zA-Z0-9.-]+\.(com|net|org|io|co|mx|info|biz)\b/gi
+
 export const reviewsValidator = (req, res, next) => {
     const { servicioId, usuarioId, calificacion, comentario, title } = req.body
 
@@ -26,6 +28,10 @@ export const reviewsValidator = (req, res, next) => {
 
     if (comentario.length > 1000)
         return res.status(400).json({ success: false, message: 'El comentario no puede superar los 1000 caracteres' })
+
+    REGEX_LINKS.lastIndex = 0
+    if (REGEX_LINKS.test(`${title || ''} ${comentario}`))
+        return res.status(400).json({ success: false, message: 'La reseña no puede contener enlaces externos' })
 
     if (title !== undefined && title !== null) {
         if (typeof title !== 'string' || title.trim().length === 0)
@@ -56,6 +62,10 @@ export const reviewsUpdateValidator = (req, res, next) => {
             return res.status(400).json({ success: false, message: 'El comentario debe tener al menos 20 caracteres' })
         if (comentario.length > 1000)
             return res.status(400).json({ success: false, message: 'El comentario no puede superar los 1000 caracteres' })
+
+        REGEX_LINKS.lastIndex = 0
+        if (REGEX_LINKS.test(`${title || ''} ${comentario}`))
+            return res.status(400).json({ success: false, message: 'La reseña no puede contener enlaces externos' })
     }
 
     if (title !== undefined && title !== null) {
@@ -64,6 +74,18 @@ export const reviewsUpdateValidator = (req, res, next) => {
         if (title.length > 150)
             return res.status(400).json({ success: false, message: 'El título no puede superar los 150 caracteres' })
     }
+
+    next()
+}
+
+export const reportReviewValidator = (req, res, next) => {
+    const { usuarioId } = req.body
+
+    if (!usuarioId)
+        return res.status(400).json({ success: false, message: 'El usuarioId es obligatorio para reportar' })
+
+    if (typeof usuarioId !== 'number' || !Number.isInteger(usuarioId))
+        return res.status(400).json({ success: false, message: 'El usuarioId debe ser un número entero' })
 
     next()
 }

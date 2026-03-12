@@ -1,54 +1,79 @@
 'use strict'
 import { Router } from 'express'
 import {
-  createTag,
-  getTags,
-  getTag,
-  updateTag,
-  deleteTag,
-  assignTagToService,
-  removeTagFromService,
-  getServicesByTag
+    createTag,
+    getTags,
+    getTag,
+    updateTag,
+    deleteTag,
+    assignTagToService,
+    removeTagFromService,
+    getServicesByTag,
+    getSuggestedTags,
+    getRarelyUsedTags,
+    autoSuggestTagsFromDescription
 } from './tag.controller.js'
 import { validateJWT } from '../../../middlewares/validate_jwt.js'
 import { requireRole } from '../../../middlewares/validate_role.js'
-import { tagValidator } from '../../../middlewares/tagValidator.js';
+import { tagValidator } from '../../../middlewares/tagValidator.js'
 
 const router = Router()
 
-// obtiene todas las tags activas
+// Obtiene todas las tags activas
 router.get(
     '/',
     validateJWT,
     getTags
 )
 
-// obtiene una tag por id
+// Etiquetas sugeridas (más usadas)
+router.get(
+    '/suggestions',
+    validateJWT,
+    getSuggestedTags
+)
+
+// Etiquetas raramente usadas
+router.get(
+    '/rarely-used',
+    validateJWT,
+    requireRole('ADMIN_ROLE'),
+    getRarelyUsedTags
+)
+
+// Sugerir etiquetas desde descripción
+router.post(
+    '/auto-suggest',
+    validateJWT,
+    autoSuggestTagsFromDescription
+)
+
+// Obtiene una tag por id
 router.get(
     '/:id',
     validateJWT,
     getTag
 )
 
-// crea una nueva tag (solo admin)
+// Crea una nueva tag (solo admin)
 router.post(
     '/',
     validateJWT,
     requireRole('ADMIN_ROLE'),
     tagValidator,
     createTag
-);
+)
 
-// actualiza una tag por id (solo admin)
+// Actualiza una tag (solo admin)
 router.put(
     '/:id',
     validateJWT,
     requireRole('ADMIN_ROLE'),
     tagValidator,
     updateTag
-);
+)
 
-// elimina una tag solo si no esta asociada a un servicio (solo admin)
+// Elimina una tag (solo admin)
 router.delete(
     '/:id',
     validateJWT,
@@ -56,7 +81,7 @@ router.delete(
     deleteTag
 )
 
-// asigna una tag a un servicio
+// Asigna una tag a un servicio
 router.post(
     '/:id/assign',
     validateJWT,
@@ -64,7 +89,7 @@ router.post(
     assignTagToService
 )
 
-// quita una tag de un servicio
+// Quita una tag de un servicio
 router.delete(
     '/:id/remove',
     validateJWT,
@@ -72,7 +97,7 @@ router.delete(
     removeTagFromService
 )
 
-// obtiene los servicios que tienen esta tag
+// Servicios que usan esta tag
 router.get(
     '/:id/services',
     validateJWT,
