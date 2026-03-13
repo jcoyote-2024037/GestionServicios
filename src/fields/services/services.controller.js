@@ -123,17 +123,13 @@ export const updateService = async (req, res) => {
     }
 }
 
-// Eliminar (soft delete)
+// Eliminar (hard delete)
 export const deleteService = async (req, res) => {
     try {
 
         const { id } = req.params
 
-        const service = await Service.findByIdAndUpdate(
-            id,
-            { estado: 'inactivo' },
-            { new: true }
-        )
+        const service = await Service.findByIdAndDelete(id)
 
         if (!service) {
             return res.status(404).json({

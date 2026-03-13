@@ -1,0 +1,2987 @@
+{
+  "info": {
+    "_postman_id": "22ae0463-9a66-4076-8853-ab6a360190a8",
+    "name": "GestionServicios",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48329686",
+    "_collection_link": "https://go.postman.co/collection/48329686-22ae0463-9a66-4076-8853-ab6a360190a8?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Services",
+      "item": [
+        {
+          "name": "Agregar Servicio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMjUxMTY5LCJleHAiOjE3NzMyNTgzNjl9.xqacLaqy9xHe2aJoazVHJuX-B-UoTT6CFDW7_R9InMw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"Mecánica Rápida Pérez\",\r\n  \"descripcion\": \"Reparación y mantenimiento de vehículos a domicilio.\",\r\n  \"categoriaId\": \"69b1ac026fdb2eb944ffba04\",\r\n  \"locationId\": \"69b1ac386fdb2eb944ffba0a\",\r\n  \"telefono\": \"50244445555\",\r\n  \"contactEmail\": \"mecanicaperez@gmail.com\",\r\n  \"contactPhone\": \"50244446666\",\r\n  \"availability\": [\r\n    {\r\n      \"day\": \"Lunes\",\r\n      \"open\": \"09:00\",\r\n      \"close\": \"18:00\"\r\n    },\r\n    {\r\n      \"day\": \"Sábado\",\r\n      \"open\": \"09:00\",\r\n      \"close\": \"14:00\"\r\n    }\r\n  ],\r\n  \"serviceAreaRadius\": 20,\r\n  \"usuarioId\": 6\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/services/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "services",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar servicios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/services",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "services"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Editar servicio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"Mecánica De todo tipo Pérez\",\r\n  \"descripcion\": \"Reparación y mantenimiento de vehículos a domicilio.\",\r\n  \"categoriaId\": \"69b1ac026fdb2eb944ffba04\",\r\n  \"locationId\": \"69b1ac386fdb2eb944ffba0a\",\r\n  \"telefono\": \"50244445555\",\r\n  \"contactEmail\": \"mecanicaperez@gmail.com\",\r\n  \"contactPhone\": \"50244446666\",\r\n  \"availability\": [\r\n    {\r\n      \"day\": \"Lunes\",\r\n      \"open\": \"09:00\",\r\n      \"close\": \"18:00\"\r\n    },\r\n    {\r\n      \"day\": \"Sábado\",\r\n      \"open\": \"09:00\",\r\n      \"close\": \"14:00\"\r\n    }\r\n  ],\r\n  \"serviceAreaRadius\": 20,\r\n  \"usuarioId\": 6\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/services/update/69b1b107dfb2deb104666b8d",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "services",
+                "update",
+                "69b1b107dfb2deb104666b8d"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar servicio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/services/delete/69b1b101dfb2deb104666b86",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "services",
+                "delete",
+                "69b1b101dfb2deb104666b86"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar por id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/services/69b1ac496fdb2eb944ffba0f",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "services",
+                "69b1ac496fdb2eb944ffba0f"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categoria",
+      "item": [
+        {
+          "name": "Agregar Categoria",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"Aire Acondicionado\",\r\n  \"descripcion\": \"Instalacion, reparacion y mantenimiento de sistemas de aire acondicionado\",\r\n  \"estado\": \"activo\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/categories/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "categories",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar categoria",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/categories",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Editar categoria",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"Pintura\",\r\n  \"descripcion\": \"Servicios de pintura para casas, oficinas y edificios\",\r\n  \"estado\": \"inactivo\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/categories/update/69b365161e85387779c4ef4a",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "categories",
+                "update",
+                "69b365161e85387779c4ef4a"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/categories/69b365101e85387779c4ef48",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "categories",
+                "69b365101e85387779c4ef48"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por categoria",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/categories/inactivo",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "categories",
+                "inactivo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar categoria",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/categories/delete/69b3651b1e85387779c4ef4c",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "categories",
+                "delete",
+                "69b3651b1e85387779c4ef4c"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "IA",
+      "item": [
+        {
+          "name": "AI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "item": [
+        {
+          "name": "Registrarse",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Pablo\",\r\n  \"surname\": \"Andres\",\r\n  \"username\": \"Andres andrew\",\r\n  \"email\": \"pdeleon-2021364@kinal.edu.gt\",\r\n  \"password\": \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"token\": \"e89b410f977a3006c221b7bc8e28c93cb2ce9e6d0104f4a229980dabbf502d93\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/auth/verify-email",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "auth",
+                "verify-email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reenviar Verificacion",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"diegocoyote208@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/auth/resend-verification",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "auth",
+                "resend-verification"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"pdeleon-2021364@kinal.edu.gt\",\r\n  \"password\": \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver Usuarios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/users/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Solicitud para Restablecer Contraseña",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"diegocoyote208@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/auth/request-reset",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "auth",
+                "request-reset"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restablecer Contraseña",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"token\": \"77eb3a593f11c2f71526c8365784cf16a29c4747653bd455d1d48d959991b2db\",\r\n  \"newPassword\": \"1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/auth/reset-password",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "auth",
+                "reset-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Editar Usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"surname\": \"Coyote\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/users/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Usuario / Eliminar Usuario ADMIN",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"surname\": \"Mactzul\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/users/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "users",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Badges",
+      "item": [
+        {
+          "name": "Crear insignias",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMjUxMTY5LCJleHAiOjE3NzMyNTgzNjl9.xqacLaqy9xHe2aJoazVHJuX-B-UoTT6CFDW7_R9InMw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Servicio Profesional\",\r\n  \"description\": \"Servicio con mas de 50 clientes complacidos\",\r\n  \"badgeType\": \"RECOMENDADO\",\r\n  \"criteria\": { \"minFavoritos\": 50 },\r\n  \"icon\": \"thumbs-up\",\r\n  \"priority\": 70,\r\n  \"autoAssign\": true,\r\n  \"expiresAt\": \"2026-12-31T23:59:59.000Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/badges",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "badges"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asignar insignia",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMjUxMTY5LCJleHAiOjE3NzMyNTgzNjl9.xqacLaqy9xHe2aJoazVHJuX-B-UoTT6CFDW7_R9InMw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"serviceId\": \"69b1ac496fdb2eb944ffba0f\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/badges/69b0e96935474e3f5d113b6e/assign",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "badges",
+                "69b0e96935474e3f5d113b6e",
+                "assign"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Editar insignia",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMjUxMTY5LCJleHAiOjE3NzMyNTgzNjl9.xqacLaqy9xHe2aJoazVHJuX-B-UoTT6CFDW7_R9InMw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Servicio Medio\",\r\n  \"description\": \"Servicio con mas de 200 favoritos\",\r\n  \"badgeType\": \"RECOMENDADO\",\r\n  \"criteria\": { \"minFavoritos\": 50 },\r\n  \"icon\": \"thumbs-up\",\r\n  \"priority\": 70,\r\n  \"autoAssign\": true,\r\n  \"expiresAt\": \"2026-12-31T23:59:59.000Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/badges/69b1ab036fdb2eb944ffba01",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "badges",
+                "69b1ab036fdb2eb944ffba01"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Quitar insignia de un servicio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMjUxMTY5LCJleHAiOjE3NzMyNTgzNjl9.xqacLaqy9xHe2aJoazVHJuX-B-UoTT6CFDW7_R9InMw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"serviceId\": \"69b1ac496fdb2eb944ffba0f\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/badges/69b0e96935474e3f5d113b6e/remove",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "badges",
+                "69b0e96935474e3f5d113b6e",
+                "remove"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar una insignia",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMjUxMTY5LCJleHAiOjE3NzMyNTgzNjl9.xqacLaqy9xHe2aJoazVHJuX-B-UoTT6CFDW7_R9InMw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/badges/69b1ab036fdb2eb944ffba01",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "badges",
+                "69b1ab036fdb2eb944ffba01"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar todas las insignias",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMjUxMTY5LCJleHAiOjE3NzMyNTgzNjl9.xqacLaqy9xHe2aJoazVHJuX-B-UoTT6CFDW7_R9InMw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/badges",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "badges"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar insignia por tipo",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMjUxMTY5LCJleHAiOjE3NzMyNTgzNjl9.xqacLaqy9xHe2aJoazVHJuX-B-UoTT6CFDW7_R9InMw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/badges?badgeType=RECOMENDADO",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "badges"
+              ],
+              "query": [
+                {
+                  "key": "badgeType",
+                  "value": "RECOMENDADO"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ranking de proveedores",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMjUxMTY5LCJleHAiOjE3NzMyNTgzNjl9.xqacLaqy9xHe2aJoazVHJuX-B-UoTT6CFDW7_R9InMw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/badges/ranking/providers?limit=10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "badges",
+                "ranking",
+                "providers"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Servicios que tienen una insignia",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMjUxMTY5LCJleHAiOjE3NzMyNTgzNjl9.xqacLaqy9xHe2aJoazVHJuX-B-UoTT6CFDW7_R9InMw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/badges/69b0e96935474e3f5d113b6e/services",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "badges",
+                "69b0e96935474e3f5d113b6e",
+                "services"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Logs",
+      "item": [
+        {
+          "name": "Listar todos los logs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/logs",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "logs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logs con todos los filtros disponibles",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMzYxMDE1LCJleHAiOjE3NzMzNjgyMTV9.KcocWHeF-QDERxRrfA5Mk3yV0fPCesqTg5jFBv-qRKU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/logs?action=DELETE&severity=HIGH&dateFrom=2025-01-01&dateTo=2025-12-31&limit=20&page=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "logs"
+              ],
+              "query": [
+                {
+                  "key": "action",
+                  "value": "DELETE"
+                },
+                {
+                  "key": "severity",
+                  "value": "HIGH"
+                },
+                {
+                  "key": "dateFrom",
+                  "value": "2025-01-01"
+                },
+                {
+                  "key": "dateTo",
+                  "value": "2025-12-31"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Locations",
+      "item": [
+        {
+          "name": "Agregar ubicacion",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTg1Mzg1LCJleHAiOjE3NzMxOTI1ODV9.Hi1JH6iGwefY_L3HjFJPwLiYbcjpTXd8DLVjiOWxogc",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Plaza Florida\",\r\n    \"address\": \"Zona 19 guatemla\",\r\n    \"municipality\": \"Guatemala\",\r\n    \"department\": \"Guatemala\",\r\n    \"zona\": \"zona 19\",\r\n    \"postalCode\": \"01019\",\r\n    \"lat\": 14.6499303,\r\n    \"lng\": -90.5835909,\r\n    \"population\": 50000\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/locations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "locations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar ubicacion",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTkwNzIwLCJleHAiOjE3NzMxOTc5MjB9.OYllt99_6Rxle_O_bom2X9SY7ZqXbDpKSU7phX3Rf6Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/locations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "locations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "actualizar ubicacion",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTg1Mzg1LCJleHAiOjE3NzMxOTI1ODV9.Hi1JH6iGwefY_L3HjFJPwLiYbcjpTXd8DLVjiOWxogc",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Plaza Fontabella\",\r\n    \"address\": \"16 Calle 0-55\",\r\n    \"municipality\": \"Guatemala\",\r\n    \"department\": \"Guatemala\",\r\n    \"zona\": \"zona 10\",\r\n    \"postalCode\": \"01010\",\r\n    \"lat\": 14.6014,\r\n    \"lng\": -90.5133,\r\n    \"population\": 30000\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/locations/69b0ac7f7078ef0aafaf674a",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "locations",
+                "69b0ac7f7078ef0aafaf674a"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "eliminar ubicacion",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTkwNzIwLCJleHAiOjE3NzMxOTc5MjB9.OYllt99_6Rxle_O_bom2X9SY7ZqXbDpKSU7phX3Rf6Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/locations/69b0b8727078ef0aafaf675e",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "locations",
+                "69b0b8727078ef0aafaf675e"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Distancia de Ubicaciones",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTg1Mzg1LCJleHAiOjE3NzMxOTI1ODV9.Hi1JH6iGwefY_L3HjFJPwLiYbcjpTXd8DLVjiOWxogc",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/locations/distance?from=69b0ac7f7078ef0aafaf674a&to=69b0acb57078ef0aafaf674e",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "locations",
+                "distance"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "69b0ac7f7078ef0aafaf674a"
+                },
+                {
+                  "key": "to",
+                  "value": "69b0acb57078ef0aafaf674e"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "centro geográfico por municipio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTg1Mzg1LCJleHAiOjE3NzMxOTI1ODV9.Hi1JH6iGwefY_L3HjFJPwLiYbcjpTXd8DLVjiOWxogc",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/locations/69b0ac7f7078ef0aafaf674a/geographic-center",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "locations",
+                "69b0ac7f7078ef0aafaf674a",
+                "geographic-center"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ubicaciones con sus servicios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTg1Mzg1LCJleHAiOjE3NzMxOTI1ODV9.Hi1JH6iGwefY_L3HjFJPwLiYbcjpTXd8DLVjiOWxogc",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/locations/zone-density",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "locations",
+                "zone-density"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tags",
+      "item": [
+        {
+          "name": "Listar Etiqueta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTkwNzIwLCJleHAiOjE3NzMxOTc5MjB9.OYllt99_6Rxle_O_bom2X9SY7ZqXbDpKSU7phX3Rf6Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/tags",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "tags"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Agregar etiqueta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTkwNzIwLCJleHAiOjE3NzMxOTc5MjB9.OYllt99_6Rxle_O_bom2X9SY7ZqXbDpKSU7phX3Rf6Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Express\",\r\n    \"description\": \"Servicio rápido\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/tags",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "tags"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Etiqueta",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Etiqueta",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asignar etiqueta a servicio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTkwNzIwLCJleHAiOjE3NzMxOTc5MjB9.OYllt99_6Rxle_O_bom2X9SY7ZqXbDpKSU7phX3Rf6Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"serviceId\": \"69b0bb0b7078ef0aafaf676a\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/tags/69b0bf42b4091d31b3a2a96c/assign",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "tags",
+                "69b0bf42b4091d31b3a2a96c",
+                "assign"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Etiqueta ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTkwNzIwLCJleHAiOjE3NzMxOTc5MjB9.OYllt99_6Rxle_O_bom2X9SY7ZqXbDpKSU7phX3Rf6Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/tags/69b0bf42b4091d31b3a2a96c",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "tags",
+                "69b0bf42b4091d31b3a2a96c"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Etiquetas en uso",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTkwNzIwLCJleHAiOjE3NzMxOTc5MjB9.OYllt99_6Rxle_O_bom2X9SY7ZqXbDpKSU7phX3Rf6Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/tags/suggestions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "tags",
+                "suggestions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Etiquetas no utilizadas",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTkwNzIwLCJleHAiOjE3NzMxOTc5MjB9.OYllt99_6Rxle_O_bom2X9SY7ZqXbDpKSU7phX3Rf6Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/tags/rarely-used",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "tags",
+                "rarely-used"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar tag por description",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTl9ST0xFIiwiaWF0IjoxNzczMTkwNzIwLCJleHAiOjE3NzMxOTc5MjB9.OYllt99_6Rxle_O_bom2X9SY7ZqXbDpKSU7phX3Rf6Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"description\": \"Ofrecemos servicio de delivery y comida rápida a domicilio\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/tags/auto-suggest",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "tags",
+                "auto-suggest"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Solicitudes",
+      "item": [
+        {
+          "name": "Listar solicitudes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/solicitudes",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "solicitudes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/solicitudes/id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "solicitudes",
+                "id"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear solicitudes",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"servicioId\": \"SERVICE_ID\",\r\n  \"descripcion\": \"Necesito reparación de tubería urgente\",\r\n  \"priceEstimate\": 150.00,\r\n  \"scheduledDate\": \"2026-04-01T10:00:00.000Z\",\r\n  \"chatEnabled\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/solicitudes/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "solicitudes",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Editar solicitudes",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"descripcion\": \"Descripción actualizada\",\r\n  \"priceEstimate\": 200.00,\r\n  \"scheduledDate\": \"2026-04-05T10:00:00.000Z\",\r\n  \"chatEnabled\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/solicitudes/update/id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "solicitudes",
+                "update",
+                "id"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar solicitud",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/solicitudes/delete/id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "solicitudes",
+                "delete",
+                "id"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cambiar estado",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nuevoEstado\": \"accepted\",\r\n  \"observacion\": \"Acepto el trabajo\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/solicitudes/estado/id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "solicitudes",
+                "estado",
+                "id"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "historial de solicitudes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/solicitudes/historial/usuario/usuarioId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "solicitudes",
+                "historial",
+                "usuario",
+                "usuarioId"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "historial de servicio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/solicitudes/historial/servicio/servicioId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "solicitudes",
+                "historial",
+                "servicio",
+                "servicioId"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Expirar solicitudes",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/solicitudes/expirar",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "solicitudes",
+                "expirar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Listar Reportes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reportes",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reportes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar reportes pendientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reportes/pendientes",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reportes",
+                "pendientes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar reportes por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reportes/id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reportes",
+                "id"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear reporte",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"servicioId\": \"SERVICE_ID\",\r\n  \"motivo\": \"estafa\",\r\n  \"reportType\": \"fraude\",\r\n  \"descripcion\": \"El proveedor cobró y no se presentó a realizar el servicio\",\r\n  \"severity\": \"high\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reportes/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reportes",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Editar Reportes",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"motivo\": \"spam\",\r\n  \"descripcion\": \"Descripción actualizada\",\r\n  \"severity\": \"critical\",\r\n  \"reportType\": \"abuso\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reportes/update/id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reportes",
+                "update",
+                "id"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Reportes",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reportes/delete/id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reportes",
+                "delete",
+                "id"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resolver o desestimar reporte",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nuevoStatus\": \"resolved\",\r\n  \"resolution\": \"Se verificó la denuncia y se desactivó el servicio\",\r\n  \"notaRevision\": \"Caso confirmado\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reportes/revisar/id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reportes",
+                "revisar",
+                "id"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Favoritos",
+      "item": [
+        {
+          "name": "crear favorito",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"usuarioId\": 1,\r\n  \"servicioId\": \"664f1b2e8c1a2b3d4e5f6a7b\",\r\n  \"notes\": \"Me interesa para el fin de semana\",\r\n  \"notificationEnabled\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Favoritos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detalle se usuario favorito",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Favoritos de usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Favoritos usuario abandonados",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/user/1?soloAbandonados=true",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                "user",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "soloAbandonados",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Favoritos usuario activos",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/user/1?soloActivos=true",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                "user",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "soloActivos",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Favoritos de usuarios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/count/664f1b2e8c1a2b3d4e5f6a7b",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                "count",
+                "664f1b2e8c1a2b3d4e5f6a7b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activar/desactivar notificaciones",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"notes\": \"Actualicé mis notas sobre este servicio\",\r\n  \"notificationEnabled\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/update/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                "update",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar favorito",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/delete/664f1b2e8c1a2b3d4e5f6a7b",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                "delete",
+                "664f1b2e8c1a2b3d4e5f6a7b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Recomendado",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/suggestions/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                "suggestions",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Popularidad de servivio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/popularity/:servicioId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                "popularity",
+                ":servicioId"
+              ],
+              "variable": [
+                {
+                  "key": "servicioId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Interaccion favorito",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/interact/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                "interact",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Favoritos abandonados",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/favorites/admin/check-abandoned",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "favorites",
+                "admin",
+                "check-abandoned"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Añadir review",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"servicioId\": \"664f1b2e8c1a2b3d4e5f6a7b\",\r\n  \"usuarioId\": 1,\r\n  \"calificacion\": 4,\r\n  \"comentario\": \"Excelente servicio, muy puntual y profesional en todo momento.\",\r\n  \"title\": \"Muy buena experiencia\",\r\n  \"isVerifiedPurchase\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reviews visibles",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Todas las Reviews",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/?status=all",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "all"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detalle reseña",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/664f1b2e8c1a2b3d4e5f6a7b",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                "664f1b2e8c1a2b3d4e5f6a7b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reseñas por servicio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/service/:servicioId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                "service",
+                ":servicioId"
+              ],
+              "variable": [
+                {
+                  "key": "servicioId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reeseñas por servicio por calificacion",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/service/664f1b2e8c1a2b3d4e5f6a7b?calificacion=5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                "service",
+                "664f1b2e8c1a2b3d4e5f6a7b"
+              ],
+              "query": [
+                {
+                  "key": "calificacion",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Editar reseña",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"calificacion\": 5,\r\n  \"comentario\": \"Después de pensarlo mejor, el servicio fue realmente excelente.\",\r\n  \"title\": \"Cambio de opinión positiva\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/update/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                "update",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar reseña",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"calificacion\": 5,\r\n  \"comentario\": \"Después de pensarlo mejor, el servicio fue realmente excelente.\",\r\n  \"title\": \"Cambio de opinión positiva\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/delete/664f1b2e8c1a2b3d4e5f6a7b",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                "delete",
+                "664f1b2e8c1a2b3d4e5f6a7b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Like en reseña",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/like/664f1b2e8c1a2b3d4e5f6a7b",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                "like",
+                "664f1b2e8c1a2b3d4e5f6a7b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ADMIN estado de reseña",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTlkMjg5YTY2NTEzMWMwY2UxMzVlOTgiLCJyb2xlIjoiQURNSU5fUk9MRSIsImlhdCI6MTc3MTkxMjIwNSwiZXhwIjoxNzcxOTE5NDA1fQ.nBPq-NE35CmHjIh0HdYEn4pyTMgOz64CPx2om3ucJs8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"hidden\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/moderate/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                "moderate",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reportar reseña",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTlkMjg5YTY2NTEzMWMwY2UxMzVlOTgiLCJyb2xlIjoiQURNSU5fUk9MRSIsImlhdCI6MTc3MTkxMjIwNSwiZXhwIjoxNzcxOTE5NDA1fQ.nBPq-NE35CmHjIh0HdYEn4pyTMgOz64CPx2om3ucJs8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"usuarioId\": 2\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3006/gestionservicio/v1/reviews/report/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "gestionservicio",
+                "v1",
+                "reviews",
+                "report",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

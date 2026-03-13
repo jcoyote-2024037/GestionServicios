@@ -19,9 +19,12 @@ router.post('/create', categoriesValidator, createCategory)
 
 router.get('/', getCategories)
 
-router.get('/:id', getCategoryById)
-
 router.get('/active', getActiveCategories)
+router.get('/activo', getActiveCategories)
+router.get('/inactivo', getActiveCategories)
+
+
+router.get('/:id', getCategoryById)
 
 router.put('/update/:id', categoriesValidator, updateCategory)
 

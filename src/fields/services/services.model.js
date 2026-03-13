@@ -117,6 +117,13 @@ const serviceSchema = new mongoose.Schema({
         enum: ['activo', 'inactivo'],
         default: 'activo'
     },
+     
+    badges: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Badge'
+        }
+    ], 
 
     usuarioId: {
         type: Number,

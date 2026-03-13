@@ -81,14 +81,7 @@ export const updateCategory = async (req, res) => {
 
         const { id } = req.params
 
-        const category = await Category.findByIdAndUpdate(
-            id,
-            req.body,
-            {
-                new: true,
-                runValidators: true
-            }
-        )
+        const category = await Category.findByIdAndDelete(id)
 
         if (!category) {
             return res.status(404).json({
@@ -112,17 +105,13 @@ export const updateCategory = async (req, res) => {
     }
 }
 
-// Eliminar (soft delete)
+// Eliminar (hard delete)
 export const deleteCategory = async (req, res) => {
     try {
 
         const { id } = req.params
 
-        const category = await Category.findByIdAndUpdate(
-            id,
-            { estado: 'inactivo' },
-            { new: true }
-        )
+        const category = await Category.findByIdAndDelete(id)
 
         if (!category) {
             return res.status(404).json({
@@ -133,7 +122,7 @@ export const deleteCategory = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: 'CategorÃ­a desactivada'
+            message: 'Categoría eliminada'
         })
 
     } catch (error) {
@@ -154,3 +143,4 @@ export const getActiveCategories = async (req, res) => {
         categories
     })
 }
+
