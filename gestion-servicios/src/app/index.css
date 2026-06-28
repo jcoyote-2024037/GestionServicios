@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  /* Paleta: La Clave de la Confianza */
+  --navy:        #0F2D54;
+  --navy-dark:   #091D38;
+  --navy-light:  #1A4A8A;
+  --orange:      #F4650A;
+  --orange-dark: #D4520A;
+  --orange-light:#FF8040;
+  --bg:          #F7F8FA;
+  --bg-white:    #FFFFFF;
+  --gray-1:      #1C2B3A;
+  --gray-2:      #4A5568;
+  --gray-3:      #718096;
+  --gray-4:      #A0AEC0;
+  --gray-5:      #E2E8F0;
+  --gray-6:      #F1F5F9;
+  --success:     #10B981;
+  --warning:     #F59E0B;
+  --error:       #EF4444;
+  --info:        #3B82F6;
+
+  /* Typography */
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body:    'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--gray-1);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--gray-6); }
+::-webkit-scrollbar-thumb { background: var(--gray-4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--navy-light); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-in      { animation: fadeIn 0.3s ease-out forwards; }
+.animate-slide-left   { animation: slideInLeft 0.3s ease-out forwards; }
+.animate-pulse-soft   { animation: pulse-soft 1.5s ease-in-out infinite; }
+.animate-spin         { animation: spin 0.7s linear infinite; }
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
+/* Status badges */
+.badge-pending   { background: #FEF3C7; color: #92400E; }
+.badge-accepted  { background: #D1FAE5; color: #065F46; }
+.badge-rejected  { background: #FEE2E2; color: #991B1B; }
+.badge-completed { background: #DBEAFE; color: #1E40AF; }
+.badge-cancelled { background: #F3F4F6; color: #374151; }
