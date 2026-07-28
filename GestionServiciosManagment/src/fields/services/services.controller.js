@@ -6,7 +6,7 @@ import Service from './services.model.js'
 export const createService = async (req, res) => {
     try {
 
-        const data = req.body
+        const data = { ...req.body, usuarioId: req.user.id }
 
         const service = new Service(data)
         await service.save()

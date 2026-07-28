@@ -18,7 +18,8 @@ import {
 
 export const createFavorite = async (req, res) => {
     try {
-        const { usuarioId, servicioId, notes, notificationEnabled } = req.body
+        const { servicioId, notes, notificationEnabled } = req.body
+        const usuarioId = req.user.id
 
         const service = await Service.findById(servicioId)
         if (!service)

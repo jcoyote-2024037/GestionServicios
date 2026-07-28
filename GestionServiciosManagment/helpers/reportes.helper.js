@@ -1,6 +1,6 @@
 'use strict'
 
-import nodemailer from 'nodemailer'
+import { sendMail } from './email-service.js'
 
 export const etiquetaMotivo = (motivo) => {
     const etiquetas = {
@@ -78,28 +78,17 @@ export const notificarAdmins = async (adminEmails, reporte, motivo = 'nuevo repo
     if (!adminEmails || adminEmails.length === 0) return
 
     try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        })
-
-        await transporter.sendMail({
-            from: `"GestionServicios" <${process.env.EMAIL_USER}>`,
-            to: adminEmails.join(', '),
-            subject: `🚨 Alerta de reporte: ${motivo}`,
-            html: `
-                <h2>Nuevo reporte requiere atención</h2>
+        await sendMail(
+            adminEmails.join(', '),
+            `Alerta de reporte: ${motivo}`,
+            `<h2>Nuevo reporte requiere atención</h2>
                 <p><strong>Motivo de alerta:</strong> ${motivo}</p>
                 <p><strong>Servicio ID:</strong> ${reporte.servicioId}</p>
                 <p><strong>Tipo:</strong> ${etiquetaReportType(reporte.reportType)}</p>
                 <p><strong>Severidad:</strong> ${etiquetaSeverity(reporte.severity)}</p>
                 <p><strong>Descripción:</strong> ${reporte.descripcion}</p>
-                <p>Ingresa al panel de administración para revisar el reporte.</p>
-            `
-        })
+                <p>Ingresa al panel de administración para revisar el reporte.</p>`
+        )
     } catch (error) {
         console.error('Error al notificar a admins:', error.message)
     }

@@ -10,6 +10,18 @@ const decodeToken = (token) => {
   }
 }
 
+const extractUser = (payload) => {
+  if (!payload) return null
+  return {
+    id: payload.sub,
+    role: payload.role,
+    name: payload.name || '',
+    surname: payload.surname || '',
+    username: payload.username || '',
+    email: payload.email || '',
+  }
+}
+
 export const useAuthStore = create(
   persist(
     (set, get) => ({
@@ -20,7 +32,19 @@ export const useAuthStore = create(
 
       checkAuth: () => {
         const token = get().token
-        set({ isLoadingAuth: false, isAuthenticated: Boolean(token) })
+        if (token) {
+          const payload = decodeToken(token)
+          if (payload) {
+            const expMs = payload.exp * 1000
+            if (Date.now() >= expMs) {
+              set({ user: null, token: null, isAuthenticated: false, isLoadingAuth: false })
+              return
+            }
+            set({ user: extractUser(payload), isAuthenticated: true, isLoadingAuth: false })
+            return
+          }
+        }
+        set({ isLoadingAuth: false })
       },
 
       login: async ({ email, password }) => {
@@ -28,7 +52,7 @@ export const useAuthStore = create(
           const { data } = await api.post('/auth/login', { email, password })
           const token = data.token || data.accessToken
           const payload = decodeToken(token)
-          const user = payload ? { id: payload.sub, role: payload.role } : null
+          const user = extractUser(payload)
           set({ user, token, isAuthenticated: true })
           return { success: true, user }
         } catch (err) {
@@ -55,7 +79,9 @@ export const useAuthStore = create(
         try {
           const userId = get().user?.id
           const { data } = await api.put(`/users/${userId}`, formData)
-          set({ user: { ...get().user, ...data.user } })
+          if (formData.name || formData.surname || formData.username) {
+            set({ user: { ...get().user, ...formData } })
+          }
           return { success: true }
         } catch (err) {
           const message = err.response?.data?.message || 'Error al actualizar perfil'

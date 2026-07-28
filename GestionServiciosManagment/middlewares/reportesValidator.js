@@ -14,6 +14,7 @@ export const revisarReporteValidator = (req, res, next) => {
 
     next()
 }
+const MOTIVOS_VALIDOS   = ['estafa', 'contenido_inapropiado', 'informacion_falsa', 'spam', 'otro']
 const REPORT_TYPES      = ['fraude', 'contenido_falso', 'spam', 'abuso']
 const SEVERITIES        = ['low', 'medium', 'high', 'critical']
 

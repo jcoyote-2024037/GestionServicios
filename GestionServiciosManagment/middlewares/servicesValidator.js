@@ -14,7 +14,7 @@ export const servicesValidator = async (req, res, next) => {
             categoriaId,
             locationId,
             telefono,
-            email
+            contactEmail
         } = req.body
 
         // Campos obligatorios
@@ -51,11 +51,11 @@ export const servicesValidator = async (req, res, next) => {
         }
 
         // Validar email si viene
-        if (email) {
+        if (contactEmail) {
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-            if (!emailRegex.test(email)) {
+            if (!emailRegex.test(contactEmail)) {
                 return res.status(400).json({
                     success: false,
                     message: 'Formato de email inválido'
@@ -85,7 +85,7 @@ export const servicesValidator = async (req, res, next) => {
         }
 
         // Validar nombre único por proveedor
-        const usuarioId = req.user.uid
+        const usuarioId = req.user.id
 
         const existingService = await Service.findOne({
             nombre,

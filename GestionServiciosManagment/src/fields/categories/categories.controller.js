@@ -81,7 +81,7 @@ export const updateCategory = async (req, res) => {
 
         const { id } = req.params
 
-        const category = await Category.findByIdAndDelete(id)
+        const category = await Category.findByIdAndUpdate(id, req.body, { new: true, runValidators: true })
 
         if (!category) {
             return res.status(404).json({
@@ -122,7 +122,7 @@ export const deleteCategory = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: 'Categoría eliminada'
+            message: 'Categorï¿½a eliminada'
         })
 
     } catch (error) {

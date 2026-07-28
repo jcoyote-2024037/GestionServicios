@@ -2,7 +2,7 @@
 
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import nodemailer from 'nodemailer';
+import { sendMail } from '../../../helpers/email-service.js'
 import { Op } from 'sequelize';
 import User from './user.model.js';
 
@@ -125,26 +125,16 @@ export const deleteUser = async (req, res) => {
         user.deleteTokenExpiration = Date.now() + 3600000;
         await user.save();
 
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        });
-
         const deleteLink =
             `http://localhost:${process.env.PORT}/restaurantManagement/v1/users/confirm-delete?token=${deleteToken}`;
 
-        await transporter.sendMail({
-            to: user.email,
-            subject: 'Confirmación eliminación de ADMIN',
-            html: `
-                <h2>Confirmar eliminación</h2>
+        await sendMail(
+            user.email,
+            'Confirmación eliminación de ADMIN',
+            `<h2>Confirmar eliminación</h2>
                 <p>Haz click para confirmar:</p>
-                <a href="${deleteLink}">${deleteLink}</a>
-            `
-        });
+                <a href="${deleteLink}">${deleteLink}</a>`
+        );
 
         return res.json({
             success: true,

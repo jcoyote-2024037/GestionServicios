@@ -1,6 +1,6 @@
 'use strict'
 
-import nodemailer from 'nodemailer'
+import { sendMail } from './email-service.js'
 
 /*
   Matriz de transiciones de estado permitidas según el rol:
@@ -104,27 +104,16 @@ export const notificarProveedor = async (emailProveedor, solicitud) => {
     if (!emailProveedor) return
 
     try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        })
-
-        await transporter.sendMail({
-            from: `"GestionServicios" <${process.env.EMAIL_USER}>`,
-            to: emailProveedor,
-            subject: '📬 Nueva solicitud para tu servicio',
-            html: `
-                <h2>Tienes una nueva solicitud</h2>
+        await sendMail(
+            emailProveedor,
+            'Nueva solicitud para tu servicio',
+            `<h2>Tienes una nueva solicitud</h2>
                 <p><strong>Servicio:</strong> ${solicitud.nombreServicio}</p>
                 <p><strong>Descripción:</strong> ${solicitud.descripcion}</p>
                 ${solicitud.scheduledDate ? `<p><strong>Fecha solicitada:</strong> ${new Date(solicitud.scheduledDate).toLocaleString('es-GT')}</p>` : ''}
                 ${solicitud.priceEstimate ? `<p><strong>Presupuesto estimado:</strong> Q${solicitud.priceEstimate}</p>` : ''}
-                <p>Ingresa a la plataforma para aceptar o rechazar la solicitud.</p>
-            `
-        })
+                <p>Ingresa a la plataforma para aceptar o rechazar la solicitud.</p>`
+        )
     } catch (error) {
         console.error('Error al notificar al proveedor:', error.message)
     }

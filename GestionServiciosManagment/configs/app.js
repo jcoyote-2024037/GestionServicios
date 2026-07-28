@@ -21,6 +21,7 @@ import favoritesRoutes from '../src/fields/favorites/favorites.routes.js';
 import badgesRoutes from '../src/fields/badges/badges_routes.js';
 import logsRoutes from '../src/fields/logs/logs_routes.js';
 import aiRoutes from '../src/AI/ai.routes.js';
+import { seedAdmin } from '../seed.js';
 
 const BASE_PATH = '/gestionservicio/v1';
 
@@ -88,6 +89,7 @@ export const initServer = async () => {
         await dbConnection();
         await connectPostgres();
         await sequelize.sync({ alter: true });
+        await seedAdmin();
 
         middlewares(app);
         routes(app);
