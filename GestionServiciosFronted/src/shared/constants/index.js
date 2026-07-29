@@ -115,6 +115,7 @@ export const PATHS = {
   ADMIN_BADGES: '/admin/badges',
   ADMIN_REPORTS: '/admin/reports',
   ADMIN_LOGS: '/admin/logs',
+  NOTIFICATIONS: '/notifications',
 }
 
 export const DAYS_OF_WEEK = [

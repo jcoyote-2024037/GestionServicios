@@ -10,6 +10,7 @@ import { ServiceFormPage } from '../../features/services/pages/ServiceFormPage'
 import { SolicitudesPage } from '../../features/solicitudes/pages/SolicitudesPage'
 import { SolicitudDetailPage } from '../../features/solicitudes/pages/SolicitudDetailPage'
 import { FavoritesPage } from '../../features/favorites/pages/FavoritesPage'
+import { NotificationsPage } from '../../features/notifications/pages/NotificationsPage'
 import { ProfilePage } from '../../features/profile/pages/ProfilePage'
 import { AdminDashboard } from '../../features/admin/pages/AdminDashboard'
 import { UsersPage } from '../../features/admin/pages/UsersPage'
@@ -46,6 +47,7 @@ export const AppRoutes = () => (
       <Route path="/solicitudes/:id" element={<SolicitudDetailPage />} />
       <Route path="/favorites" element={<FavoritesPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/notifications" element={<NotificationsPage />} />
       <Route path="/admin/services" element={<ProtectedRoute requiredRole={[ROLES.ADMIN, ROLES.DUENO]}><MyServicesPage /></ProtectedRoute>} />
 
       <Route path="/admin" element={<ProtectedRoute requiredRole={ROLES.ADMIN}><AdminDashboard /></ProtectedRoute>} />
