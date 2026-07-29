@@ -100,66 +100,89 @@ export const DashboardPage = () => {
   ]
 
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in space-y-8">
       {/* Greeting */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-1">
-          <span className="text-2xl">{greet.emoji}</span>
+      <div className="relative overflow-hidden rounded-2xl p-6"
+        style={{
+          background: 'linear-gradient(135deg, rgba(244,63,94,0.08), rgba(236,72,153,0.05))',
+          border: '1px solid rgba(244,63,94,0.1)',
+        }}>
+        <div className="flex items-center gap-4 relative z-10">
+          <span className="text-3xl animate-float">{greet.emoji}</span>
           <div>
             <h1 className="text-2xl font-bold text-white">
-              {greet.text}, {user?.name || 'usuario'}
+              {greet.text}, <span className="gradient-text">{user?.name || 'usuario'}</span>
             </h1>
-            <p className="text-white/40 text-sm mt-0.5">Bienvenido a tu panel de GestionServicios</p>
+            <p className="text-white/40 text-sm mt-1">Bienvenido a tu panel de GestionServicios</p>
           </div>
         </div>
+        <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-[var(--brand)] opacity-[0.03] blur-3xl" />
+        <div className="absolute -bottom-8 -left-8 w-40 h-40 rounded-full bg-[var(--accent)] opacity-[0.02] blur-3xl" />
       </div>
 
       {/* Quick actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-        {quickActions.map((action, i) => (
-          <div key={action.label} className="animate-fade-in" style={{ animationDelay: `${i * 0.05}s` }}>
-            <QuickActionCard
-              icon={action.icon}
-              label={action.label}
-              description={action.description}
-              color={action.color}
-              onClick={() => navigate(action.path)}
-            />
-          </div>
-        ))}
+      <div>
+        <div className="section-header">
+          <h2 className="section-title flex items-center gap-2">
+            <svg className="w-5 h-5 text-[var(--brand)]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            Acciones rápidas
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {quickActions.map((action, i) => (
+            <div key={action.label} className="animate-fade-in" style={{ animationDelay: `${i * 0.05}s` }}>
+              <QuickActionCard
+                icon={action.icon}
+                label={action.label}
+                description={action.description}
+                color={action.color}
+                onClick={() => navigate(action.path)}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        {loading
-          ? [1, 2, 3].map(i => <div key={i} className="animate-fade-in" style={{ animationDelay: `${i * 0.06}s` }}><StatCardSkeleton /></div>)
-          : statCards.map((card, i) => (
-          <button key={card.label} onClick={() => navigate(card.route)}
-            className="glass-card glass-card-interactive p-5 text-left group animate-fade-in"
-            style={{ animationDelay: `${i * 0.06}s` }}>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110" style={{ background: `${card.color}18`, color: card.color }}>
-                {card.icon}
+      <div>
+        <div className="section-header">
+          <h2 className="section-title flex items-center gap-2">
+            <svg className="w-5 h-5 text-[var(--brand)]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+            Resumen
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {loading
+            ? [1, 2, 3].map(i => <div key={i} className="animate-fade-in" style={{ animationDelay: `${i * 0.06}s` }}><StatCardSkeleton /></div>)
+            : statCards.map((card, i) => (
+            <button key={card.label} onClick={() => navigate(card.route)}
+              className="stat-card text-left group animate-fade-in"
+              style={{ animationDelay: `${i * 0.06}s`, '--stat-color': card.color } as React.CSSProperties}>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="stat-icon" style={{ background: `${card.color}18`, color: card.color }}>
+                  {card.icon}
+                </div>
+                <p className="text-white/40 text-sm font-medium">{card.label}</p>
               </div>
-              <p className="text-white/40 text-sm">{card.label}</p>
-            </div>
-            <p className="text-3xl font-bold transition-all group-hover:scale-105 inline-block" style={{ color: card.color }}>
-              {card.value}
-            </p>
-          </button>
-        ))}
+              <p className="stat-value" style={{ color: card.color }}>
+                {card.value}
+              </p>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Featured */}
       {!loading && featuredServices.length > 0 && (
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+        <div>
+          <div className="section-header">
+            <h2 className="section-title flex items-center gap-2">
               <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
               Destacados
             </h2>
-            <button onClick={() => navigate('/services')} className="text-sm text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
+            <button onClick={() => navigate('/services')} className="section-link">
               Ver todos
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
             </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -174,9 +197,9 @@ export const DashboardPage = () => {
 
       {/* Popular */}
       {!loading && popularServices.length > 0 && (
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+        <div>
+          <div className="section-header">
+            <h2 className="section-title flex items-center gap-2">
               <svg className="w-5 h-5 text-[var(--brand)]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
               Más populares
             </h2>
@@ -192,11 +215,15 @@ export const DashboardPage = () => {
       )}
 
       {/* Recent Services */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-white">Servicios recientes</h2>
-          <button onClick={() => navigate('/services')} className="text-sm text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
+      <div className="pb-4">
+        <div className="section-header">
+          <h2 className="section-title flex items-center gap-2">
+            <svg className="w-5 h-5 text-[var(--brand)]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            Servicios recientes
+          </h2>
+          <button onClick={() => navigate('/services')} className="section-link">
             Ver todos
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
           </button>
         </div>
 
