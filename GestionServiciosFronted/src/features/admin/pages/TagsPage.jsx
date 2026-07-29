@@ -56,7 +56,7 @@ export const TagsPage = () => {
           <p className="text-white/40 text-sm mt-1">Gestiona las etiquetas de servicios</p>
         </div>
         <button onClick={() => navigate('/admin/tags/new')}
-          className="btn-primary">
+          className="glass-btn">
           + Nueva
         </button>
       </div>

@@ -3,11 +3,13 @@
 import { Router } from "express"
 import {
     createService, getServices, getServiceById,
-    updateService, deleteService, getMyServices, getNearbyServices
+    updateService, deleteService, getMyServices, getNearbyServices,
+    getFeaturedServices, getPopularServices
 } from "./services.controller.js"
 import { servicesValidator } from "../../../middlewares/servicesValidator.js"
 import { validateJWT } from "../../../middlewares/validate_jwt.js"
 import { requireRole } from '../../../middlewares/validate_role.js';
+import { uploadImages } from '../../../middlewares/upload.js';
 
 const router = Router()
 
@@ -31,7 +33,7 @@ const router = Router()
  *       400:
  *         description: Datos inválidos
  */
-router.post('/create', validateJWT, servicesValidator, createService)
+router.post('/create', validateJWT, requireRole('ADMIN_ROLE', 'DUENO_ROLE'), uploadImages, servicesValidator, createService)
 
 /**
  * @swagger
@@ -60,6 +62,30 @@ router.get('/', getServices)
 router.get('/mine', validateJWT, getMyServices)
 
 router.get('/nearby', validateJWT, getNearbyServices)
+
+/**
+ * @swagger
+ * /services/featured:
+ *   get:
+ *     summary: Obtener servicios destacados
+ *     tags: [Services]
+ *     responses:
+ *       200:
+ *         description: Lista de servicios destacados
+ */
+router.get('/featured', getFeaturedServices)
+
+/**
+ * @swagger
+ * /services/popular:
+ *   get:
+ *     summary: Obtener servicios populares
+ *     tags: [Services]
+ *     responses:
+ *       200:
+ *         description: Lista de servicios populares
+ */
+router.get('/popular', getPopularServices)
 
 /**
  * @swagger
@@ -109,7 +135,7 @@ router.get('/:id', validateJWT, getServiceById)
  *       403:
  *         description: Acceso denegado
  */
-router.put('/update/:id', validateJWT, requireRole('ADMIN_ROLE', 'DUENO_ROLE'), servicesValidator, updateService)
+router.put('/update/:id', validateJWT, requireRole('ADMIN_ROLE', 'DUENO_ROLE'), uploadImages, servicesValidator, updateService)
 
 /**
  * @swagger

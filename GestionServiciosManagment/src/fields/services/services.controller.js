@@ -10,6 +10,17 @@ export const createService = async (req, res) => {
 
         const data = { ...req.body, usuarioId: req.user.id }
 
+        if (typeof data.tags === 'string') {
+            try { data.tags = JSON.parse(data.tags) } catch { data.tags = [] }
+        }
+        if (typeof data.availability === 'string') {
+            try { data.availability = JSON.parse(data.availability) } catch { data.availability = [] }
+        }
+
+        if (req.files?.length) {
+            data.imagenes = req.files.map(f => `/uploads/services/${f.filename}`)
+        }
+
         const service = new Service(data)
         await service.save()
 
@@ -132,9 +143,25 @@ export const updateService = async (req, res) => {
             })
         }
 
+        const data = { ...req.body }
+
+        if (typeof data.tags === 'string') {
+            try { data.tags = JSON.parse(data.tags) } catch { delete data.tags }
+        }
+        if (typeof data.availability === 'string') {
+            try { data.availability = JSON.parse(data.availability) } catch { delete data.availability }
+        }
+
+        if (req.files?.length) {
+            data.imagenes = [
+                ...(service.imagenes || []),
+                ...req.files.map(f => `/uploads/services/${f.filename}`)
+            ]
+        }
+
         const updated = await Service.findByIdAndUpdate(
             id,
-            req.body,
+            data,
             {
                 new: true,
                 runValidators: true

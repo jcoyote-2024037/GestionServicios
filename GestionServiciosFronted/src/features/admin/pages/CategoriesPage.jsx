@@ -54,7 +54,7 @@ export const CategoriesPage = () => {
           <p className="text-white/40 text-sm mt-1">Gestiona las categorías de servicios</p>
         </div>
         <button onClick={() => navigate('/admin/categories/new')}
-          className="btn-primary">
+          className="glass-btn">
           + Nueva
         </button>
       </div>

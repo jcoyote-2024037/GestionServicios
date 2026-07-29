@@ -56,7 +56,7 @@ export const LocationsPage = () => {
           <p className="text-white/40 text-sm mt-1">Gestiona las ubicaciones del sistema</p>
         </div>
         <button onClick={() => navigate('/admin/locations/new')}
-          className="btn-primary">
+          className="glass-btn">
           + Nueva
         </button>
       </div>

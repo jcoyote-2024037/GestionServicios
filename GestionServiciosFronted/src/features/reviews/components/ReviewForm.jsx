@@ -68,7 +68,7 @@ export const ReviewForm = ({ serviceId, onReviewCreated }) => {
       <div className="flex items-center justify-between">
         <span className="text-xs text-white/30">{comentario.length} / 500</span>
         <button type="submit" disabled={submitting || comentario.length < 20}
-          className="btn-primary">
+          className="glass-btn">
           {submitting ? 'Publicando...' : 'Publicar'}
         </button>
       </div>

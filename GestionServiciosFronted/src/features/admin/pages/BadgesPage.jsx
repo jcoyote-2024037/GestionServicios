@@ -66,7 +66,7 @@ export const BadgesPage = () => {
             Auto-Asignar Todas
           </button>
           <button onClick={() => navigate('/admin/badges/new')}
-            className="btn-primary">
+            className="glass-btn">
             + Nueva
           </button>
         </div>

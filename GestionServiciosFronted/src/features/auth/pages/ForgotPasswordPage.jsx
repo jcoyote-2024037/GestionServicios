@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import api from '../../../shared/api/api'
-import RadarBackground from '../../../shared/components/ui/RadarBackground'
 import '../../../shared/components/ui/glass.css'
 
 export const ForgotPasswordPage = () => {
@@ -27,7 +26,28 @@ export const ForgotPasswordPage = () => {
   }
 
   return (
-    <RadarBackground>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: '#09090b',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'radial-gradient(ellipse 80% 50% at 50% -20%, rgba(244,63,94,0.12) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 100%, rgba(236,72,153,0.08) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
+        backgroundSize: '40px 40px',
+        pointerEvents: 'none',
+      }} />
       <div style={{
         minHeight: '100vh',
         display: 'flex',
@@ -40,7 +60,7 @@ export const ForgotPasswordPage = () => {
         <div className="glass-card" style={{
           width: '100%',
           maxWidth: '420px',
-          padding: '44px 36px 38px',
+          padding: 'clamp(28px, 6vw, 44px) clamp(20px, 5vw, 36px) clamp(28px, 5vw, 38px)',
           animation: 'slideInFromLeft 0.8s ease-out',
         }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
@@ -111,6 +131,6 @@ export const ForgotPasswordPage = () => {
           </p>
         </div>
       </div>
-    </RadarBackground>
+    </div>
   )
 }

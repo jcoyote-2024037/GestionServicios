@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { adminService } from '../../../shared/api/services/adminService'
 import { Spinner } from '../../../shared/components/ui/Spinner'
+import { MapPicker } from '../../../shared/components/ui/MapPicker'
 
 const emptyForm = { name: '', address: '', municipality: '', department: '', zona: '', lat: '', lng: '' }
 
@@ -13,6 +14,8 @@ export const LocationFormPage = () => {
   const [loading, setLoading] = useState(isEditing)
   const [form, setForm] = useState(emptyForm)
   const [saving, setSaving] = useState(false)
+  const [mapLat, setMapLat] = useState(14.6349)
+  const [mapLng, setMapLng] = useState(-90.5069)
 
   useEffect(() => {
     if (isEditing) {
@@ -25,6 +28,10 @@ export const LocationFormPage = () => {
             department: loc.department || '', zona: loc.zona || '',
             lat: loc.lat?.toString() || '', lng: loc.lng?.toString() || ''
           })
+          if (loc.lat && loc.lng) {
+            setMapLat(loc.lat)
+            setMapLng(loc.lng)
+          }
         } else { toast.error('Ubicación no encontrada'); navigate('/admin/locations') }
       }).catch(() => {
         toast.error('Error al cargar ubicación')
@@ -36,7 +43,7 @@ export const LocationFormPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.name.trim()) { toast.error('Nombre es obligatorio'); return }
-    const payload = { ...form, lat: form.lat ? Number(form.lat) : undefined, lng: form.lng ? Number(form.lng) : undefined }
+    const payload = { ...form, lat: mapLat, lng: mapLng }
     setSaving(true)
     try {
       if (isEditing) {
@@ -91,16 +98,9 @@ export const LocationFormPage = () => {
               <input value={form.zona} onChange={(e) => setForm({ ...form, zona: e.target.value })} className="glass-input" placeholder="Zona" />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs text-white/40 mb-1">Latitud</label>
-              <input type="number" step="any" value={form.lat} onChange={(e) => setForm({ ...form, lat: e.target.value })} className="glass-input" placeholder="0.0000" />
-            </div>
-            <div>
-              <label className="block text-xs text-white/40 mb-1">Longitud</label>
-              <input type="number" step="any" value={form.lng} onChange={(e) => setForm({ ...form, lng: e.target.value })} className="glass-input" placeholder="0.0000" />
-            </div>
-          </div>
+
+          <MapPicker lat={mapLat} lng={mapLng} onLocationChange={(lat, lng) => { setMapLat(lat); setMapLng(lng) }} />
+
           <button type="submit" className="glass-btn" disabled={saving}>
             {saving ? 'Guardando...' : isEditing ? 'Actualizar Ubicación' : 'Crear Ubicación'}
           </button>

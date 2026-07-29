@@ -1,3 +1,4 @@
+/* ── Glass Card ── */
 .glass-card {
   background: rgba(17, 25, 40, 0.72);
   backdrop-filter: blur(20px) saturate(180%);
@@ -7,15 +8,51 @@
   box-shadow:
     0 30px 60px -12px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  position: relative;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(244, 63, 94, 0.03) 0%,
+    transparent 40%,
+    rgba(236, 72, 153, 0.02) 100%
+  );
+  pointer-events: none;
 }
 
 .glass-card:hover {
   border-color: rgba(255, 255, 255, 0.12);
   box-shadow:
     0 35px 70px -12px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 0 40px -15px rgba(244, 63, 94, 0.06);
 }
 
+/* ── Glow variant ── */
+.glass-card--glow {
+  box-shadow:
+    0 30px 60px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 0 30px -8px rgba(244, 63, 94, 0.08);
+}
+
+/* ── Gradient border variant ── */
+.glass-card--gradient-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(244,63,94,0.15), transparent, rgba(236,72,153,0.15));
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ── Input ── */
 .input-wrapper {
   position: relative;
   display: flex;
@@ -26,18 +63,18 @@
   position: absolute;
   left: 14px;
   pointer-events: none;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.25);
   transition: color 0.2s ease;
   z-index: 1;
 }
 
 .input-wrapper:focus-within .input-icon {
-  color: rgba(167, 139, 250, 0.8);
+  color: var(--brand);
 }
 
 .glass-input {
   width: 100%;
-  padding: 14px 16px 14px 44px;
+  padding: 14px 16px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
@@ -45,7 +82,7 @@
   font-size: 0.9rem;
   font-family: inherit;
   outline: none;
-  transition: all 0.25s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-input::placeholder {
@@ -58,11 +95,14 @@
 }
 
 .glass-input:focus {
-  border-color: rgba(167, 139, 250, 0.5);
+  border-color: rgba(244, 63, 94, 0.5);
   background: rgba(255, 255, 255, 0.07);
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.08);
+  box-shadow:
+    0 0 0 3px rgba(244, 63, 94, 0.1),
+    0 0 20px -8px rgba(244, 63, 94, 0.15);
 }
 
+/* ── Glass Button ── */
 .glass-btn {
   display: inline-flex;
   align-items: center;
@@ -83,7 +123,7 @@
     0 1px 3px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.15),
     inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-  transition: all 0.25s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   letter-spacing: 0.01em;
   position: relative;
   overflow: hidden;
@@ -98,6 +138,19 @@
   pointer-events: none;
 }
 
+.glass-btn::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(244,63,94,0.2), transparent, rgba(236,72,153,0.2));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.glass-btn:hover:not(:disabled)::after { opacity: 1; }
+
 .glass-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow:
@@ -109,17 +162,15 @@
 
 .glass-btn:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow:
-    0 2px 8px rgba(244, 63, 94, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .glass-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-/* ── Botones pequeños (para tablas) ── */
+/* ── Small Buttons ── */
 .btn-sm {
   padding: 6px 14px;
   font-size: 0.75rem;
@@ -129,13 +180,13 @@
   align-items: center;
   gap: 5px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid transparent;
   position: relative;
   overflow: hidden;
 }
 
-/* ── Editar ── */
+/* ── Button Variants ── */
 .btn-edit {
   color: rgba(167, 139, 250, 0.7);
   background: rgba(167, 139, 250, 0.08);
@@ -149,12 +200,8 @@
   box-shadow: 0 2px 8px rgba(167, 139, 250, 0.2);
   transform: translateY(-1px);
 }
-.btn-edit:active {
-  transform: translateY(0);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-}
+.btn-edit:active { transform: translateY(0); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15); }
 
-/* ── Eliminar ── */
 .btn-danger {
   color: rgba(248, 113, 113, 0.7);
   background: rgba(248, 113, 113, 0.08);
@@ -168,12 +215,8 @@
   box-shadow: 0 2px 8px rgba(248, 113, 113, 0.2);
   transform: translateY(-1px);
 }
-.btn-danger:active {
-  transform: translateY(0);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-}
+.btn-danger:active { transform: translateY(0); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15); }
 
-/* ── Success / Aceptar ── */
 .btn-success {
   color: rgba(74, 222, 128, 0.8);
   background: rgba(74, 222, 128, 0.08);
@@ -187,12 +230,8 @@
   box-shadow: 0 2px 8px rgba(74, 222, 128, 0.2);
   transform: translateY(-1px);
 }
-.btn-success:active {
-  transform: translateY(0);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-}
+.btn-success:active { transform: translateY(0); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15); }
 
-/* ── Warning / Reportar ── */
 .btn-warning {
   color: rgba(251, 146, 60, 0.8);
   background: rgba(251, 146, 60, 0.08);
@@ -206,12 +245,8 @@
   box-shadow: 0 2px 8px rgba(251, 146, 60, 0.2);
   transform: translateY(-1px);
 }
-.btn-warning:active {
-  transform: translateY(0);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-}
+.btn-warning:active { transform: translateY(0); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15); }
 
-/* ── Info / Aceptar solicitud ── */
 .btn-info {
   color: rgba(96, 165, 250, 0.8);
   background: rgba(96, 165, 250, 0.08);
@@ -225,12 +260,8 @@
   box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
   transform: translateY(-1px);
 }
-.btn-info:active {
-  transform: translateY(0);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-}
+.btn-info:active { transform: translateY(0); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15); }
 
-/* ── Outline / Secundario ── */
 .btn-outline {
   color: rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.03);
@@ -244,12 +275,8 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
 }
-.btn-outline:active {
-  transform: translateY(0);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-}
+.btn-outline:active { transform: translateY(0); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15); }
 
-/* ── Ghost / Texto plano ── */
 .btn-ghost {
   color: rgba(255, 255, 255, 0.45);
   background: transparent;
@@ -261,44 +288,37 @@
   background: rgba(255, 255, 255, 0.06);
 }
 
-/* ── Botón primario sólido (marca) ── */
 .btn-primary {
   color: white;
-  background: linear-gradient(135deg, var(--brand, #a78bfa), var(--accent, #8b5cf6));
   border: none;
-  box-shadow:
-    0 3px 12px rgba(167, 139, 250, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
   position: relative;
   overflow: hidden;
 }
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-  border-radius: inherit;
-  pointer-events: none;
-}
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    0 6px 20px rgba(167, 139, 250, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-.btn-primary:active {
-  transform: translateY(0);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+
+.glass-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.4);
+  display: block;
+  margin-bottom: 6px;
 }
 
 .glass-link {
-  color: rgba(167, 139, 250, 0.8);
+  color: rgba(244, 63, 94, 0.8);
   text-decoration: none;
   transition: color 0.2s;
   font-weight: 500;
   cursor: pointer;
 }
-
 .glass-link:hover {
-  color: rgba(167, 139, 250, 1);
+  color: rgba(244, 63, 94, 1);
+}
+
+/* ── Animation for sidebar mobile ── */
+@keyframes slideRight {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.animate-slide-right {
+  animation: slideRight 0.3s ease-out both;
 }

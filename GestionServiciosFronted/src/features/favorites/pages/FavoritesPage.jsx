@@ -38,11 +38,7 @@ export const FavoritesPage = () => {
 
   const handleInteract = async (e, fav) => {
     e.stopPropagation()
-    try {
-      await favoritesService.interact(fav._id || fav.id)
-    } catch {
-      // silently fail — interact is optional tracking
-    }
+    try { await favoritesService.interact(fav._id || fav.id) } catch {}
   }
 
   const handleRemove = async (e, favId) => {
@@ -71,7 +67,7 @@ export const FavoritesPage = () => {
           description="Guarda servicios en favoritos para verlos aquí"
           action={
             <button onClick={() => navigate('/services')}
-              className="btn-primary">
+              className="glass-btn w-auto px-6">
               Explorar servicios
             </button>
           }
@@ -81,22 +77,29 @@ export const FavoritesPage = () => {
           {favorites.map((fav) => (
             <div key={fav._id || fav.id}
               onClick={(e) => { handleInteract(e, fav); navigate(`/services/${fav.servicioId?._id || fav.servicioId}`) }}
-              className="glass-card glass-card-interactive p-4 cursor-pointer">
+              className="glass-card glass-card-interactive p-4 cursor-pointer group">
               <div className="flex items-center justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <p className="text-white font-medium text-sm truncate">{fav.servicioId?.nombre || 'Servicio'}</p>
-                  {fav.servicioId?.descripcion && (
-                    <p className="text-white/40 text-xs mt-1 truncate">{fav.servicioId.descripcion}</p>
-                  )}
-                  <p className="text-white/20 text-xs mt-1">
-                    Guardado el {new Date(fav.fecha || fav.createdAt).toLocaleDateString('es-GT')}
-                  </p>
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110"
+                    style={{ background: 'linear-gradient(135deg, var(--brand), var(--accent))' }}>
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-white font-medium text-sm truncate">{fav.servicioId?.nombre || 'Servicio'}</p>
+                    {fav.servicioId?.descripcion && (
+                      <p className="text-white/40 text-xs mt-0.5 truncate">{fav.servicioId.descripcion}</p>
+                    )}
+                    <p className="text-white/15 text-[11px] mt-1">
+                      Guardado el {new Date(fav.fecha || fav.createdAt).toLocaleDateString('es-GT')}
+                    </p>
+                  </div>
                 </div>
                 <button onClick={(e) => handleRemove(e, fav._id || fav.id)}
-                  className="text-white/30 hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-red-500/10">
+                  className="text-white/20 hover:text-red-400 transition-all p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
                 </button>
               </div>

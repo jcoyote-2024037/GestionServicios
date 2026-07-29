@@ -27,14 +27,14 @@ export const DataTable = ({
 
   return (
     <div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-2xl glass-card p-0">
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/10">
               {columns.map((col) => (
                 <th
                   key={col.key}
-                  className="text-left px-4 py-3 text-xs font-medium text-white/40 uppercase tracking-wider"
+                  className="text-left px-4 py-3.5 text-xs font-medium text-white/40 uppercase tracking-wider"
                   style={col.width ? { width: col.width } : {}}
                 >
                   {col.label}
@@ -47,12 +47,19 @@ export const DataTable = ({
               <tr
                 key={row._id || row.id || idx}
                 onClick={() => onRowClick?.(row)}
-                className={`border-b border-white/5 hover:bg-white/5 transition-colors ${
+                className={`border-b border-white/[0.03] transition-all duration-200 ${
                   onRowClick ? 'cursor-pointer' : ''
                 }`}
+                style={{
+                  background: idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)'
+                }}
               >
                 {columns.map((col) => (
-                  <td key={col.key} className="px-4 py-3 text-sm text-white/70">
+                  <td key={col.key} className="px-4 py-3 text-sm text-white/65">
                     {col.render ? col.render(row[col.key], row) : row[col.key]}
                   </td>
                 ))}
