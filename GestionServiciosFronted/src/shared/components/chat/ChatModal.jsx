@@ -73,6 +73,7 @@ export const ChatModal = ({ solicitudId, isOpen, onClose }) => {
     })
 
     socket.on('new_message', (msg) => {
+      if (msg.from === user.id) return
       setMessages((prev) => [...prev, msg])
     })
 
@@ -107,9 +108,10 @@ export const ChatModal = ({ solicitudId, isOpen, onClose }) => {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#111928] border border-white/10 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg sm:mx-4 max-h-[80vh] flex flex-col shadow-2xl">
+    <div className="fixed inset-0 z-50" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:max-w-lg max-h-[85vh] flex flex-col rounded-2xl border border-white/10 bg-[#111928] shadow-2xl"
+        onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
           <h3 className="text-white font-semibold text-sm">Chat</h3>
           <button onClick={onClose} className="text-white/40 hover:text-white p-1">
