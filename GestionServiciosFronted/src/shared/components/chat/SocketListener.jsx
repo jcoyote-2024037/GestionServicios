@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 
-const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/gestionservicio/v1', '') || 'http://localhost:3000'
+const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/gestionservicio/v1', '') || import.meta.env.VITE_SOCKET_URL || ''
 
 export const SocketListener = () => {
   const { user, isAuthenticated } = useAuth()
@@ -19,6 +19,8 @@ export const SocketListener = () => {
     if (raw) {
       try { token = JSON.parse(raw).state?.token || '' } catch {}
     }
+
+    if (!SOCKET_URL) return
 
     const socket = io(SOCKET_URL, { auth: { token } })
     socketRef.current = socket

@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { notificationsService } from '../../api/services/notificationsService'
 
+const getSocketUrl = () => {
+  const apiUrl = import.meta.env.VITE_API_URL || ''
+  return apiUrl.replace('/gestionservicio/v1', '') || apiUrl.replace('/gestionservicio/v1/', '') || import.meta.env.VITE_SOCKET_URL || ''
+}
+
 export const Navbar = ({ onOpenSidebar }) => {
   const { user, isAdmin } = useAuth()
   const navigate = useNavigate()
@@ -41,7 +46,9 @@ export const Navbar = ({ onOpenSidebar }) => {
     }
     if (!token) return
 
-    const socketUrl = (import.meta.env.VITE_API_URL || '').replace('/gestionservicio/v1', '') || 'http://localhost:3000'
+    const socketUrl = getSocketUrl()
+    if (!socketUrl) return
+
     import('socket.io-client').then(({ io }) => {
       const socket = io(socketUrl, { auth: { token } })
       socket.on('chat_notification', () => setNoLeidas((c) => c + 1))

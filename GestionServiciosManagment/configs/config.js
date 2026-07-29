@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 export const config = {
   smtp: {
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
@@ -15,4 +12,7 @@ export const config = {
     frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
     port: process.env.PORT || 3006,
   },
-};
+  mongodb: {
+    uri: process.env.MONGODB_URI || process.env.URI_MONGO,
+  },
+}

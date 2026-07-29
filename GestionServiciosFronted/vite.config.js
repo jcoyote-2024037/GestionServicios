@@ -12,4 +12,19 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    minify: 'esbuild',
+    cssMinify: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['react-hot-toast', 'react-hook-form', 'zustand'],
+          maps: ['leaflet', 'react-leaflet'],
+          socket: ['socket.io-client'],
+        },
+      },
+    },
+    sourcemap: false,
+  },
 })

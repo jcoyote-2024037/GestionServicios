@@ -125,8 +125,9 @@ export const deleteUser = async (req, res) => {
         user.deleteTokenExpiration = Date.now() + 3600000;
         await user.save();
 
+        const baseUrl = process.env.FRONTEND_URL || `http://localhost:${process.env.PORT}`
         const deleteLink =
-            `http://localhost:${process.env.PORT}/restaurantManagement/v1/users/confirm-delete?token=${deleteToken}`;
+            `${baseUrl}/admin/users/confirm-delete?token=${deleteToken}`;
 
         await sendMail(
             user.email,

@@ -5,7 +5,7 @@ import { chatService } from '../../api/services/chatService'
 import { useAuth } from '../../hooks/useAuth'
 import { Spinner } from '../ui/Spinner'
 
-const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/gestionservicio/v1', '') || 'http://localhost:3000'
+const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/gestionservicio/v1', '') || import.meta.env.VITE_SOCKET_URL || ''
 
 export const ChatModal = ({ solicitudId, isOpen, onClose }) => {
   const [room, setRoom] = useState(null)

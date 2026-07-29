@@ -8,11 +8,16 @@
     "userInterfaceStyle": "dark",
     "scheme": "gestionservicios",
     "splash": {
-      "backgroundColor": "#09090b"
+      "image": "./assets/splash-icon.png",
+      "backgroundColor": "#09090b",
+      "resizeMode": "contain"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.gestionservicios.mobile"
+      "bundleIdentifier": "com.gestionservicios.mobile",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Permite subir imágenes de perfil y servicios"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,7 +27,8 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.gestionservicios.mobile"
+      "package": "com.gestionservicios.mobile",
+      "permissions": []
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +36,11 @@
     "plugins": [
       "expo-router",
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "tu-project-id-aqui"
+      }
+    }
   }
 }

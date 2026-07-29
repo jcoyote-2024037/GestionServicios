@@ -1,14 +1,7 @@
-'use strict';
+import mongoose from 'mongoose'
+import { Sequelize } from 'sequelize'
 
-import mongoose from 'mongoose';
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-/* ===========================
-   🔹 PostgreSQL - Sequelize
-=========================== */
+const URI_MONGO = process.env.MONGODB_URI || process.env.URI_MONGO
 
 export const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -19,54 +12,56 @@ export const sequelize = new Sequelize(
     port: process.env.DB_PORT,
     dialect: 'postgres',
     logging: false,
+    pool: {
+      max: 10,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
   }
-);
+)
 
 export const connectPostgres = async () => {
   try {
-    await sequelize.authenticate();
-    console.log('PostgreSQL | Conectado correctamente');
+    await sequelize.authenticate()
+    console.log('PostgreSQL | Conectado correctamente')
   } catch (error) {
-    console.error('PostgreSQL | Error de conexión:', error.message);
+    console.error('PostgreSQL | Error de conexión:', error.message)
   }
-};
-
-/* ===========================
-   🔹 MongoDB - Mongoose
-=========================== */
+}
 
 export const dbConnection = async () => {
   try {
     mongoose.connection.on('connected', () => {
-      console.log('MongoDB | Conectado correctamente');
-    });
+      console.log('MongoDB | Conectado correctamente')
+    })
 
-    mongoose.connection.on('error', () => {
-      console.log('MongoDB | Error de conexión');
-      mongoose.disconnect();
-    });
+    mongoose.connection.on('error', (err) => {
+      console.error('MongoDB | Error de conexión:', err.message)
+    })
 
-    await mongoose.connect(process.env.URI_MONGO, {
+    mongoose.connection.on('disconnected', () => {
+      console.log('MongoDB | Desconectado, intentando reconectar...')
+    })
+
+    await mongoose.connect(URI_MONGO, {
       serverSelectionTimeoutMS: 5000,
-      maxPoolSize: 10
-    });
+      maxPoolSize: 10,
+    })
 
   } catch (error) {
-    console.log(`Error al conectar MongoDB: ${error}`);
+    console.error(`Error al conectar MongoDB: ${error.message}`)
+    process.exit(1)
   }
-};
-
-/* ===========================
-   🔹 Cierre limpio
-=========================== */
+}
 
 const gracefulShutdown = async (signal) => {
-  console.log(`Recibido ${signal}. Cerrando conexiones...`);
-  await mongoose.connection.close();
-  await sequelize.close();
-  process.exit(0);
-};
+  console.log(`Recibido ${signal}. Cerrando conexiones...`)
+  await mongoose.connection.close()
+  await sequelize.close()
+  process.exit(0)
+}
 
-process.on('SIGINT', () => gracefulShutdown('SIGINT'));
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGUSR2', () => gracefulShutdown('SIGUSR2'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'))
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'))
+process.on('SIGUSR2', () => gracefulShutdown('SIGUSR2'))
