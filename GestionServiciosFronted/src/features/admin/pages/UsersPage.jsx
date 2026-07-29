@@ -13,6 +13,8 @@ export const UsersPage = () => {
   const [totalPages, setTotalPages] = useState(1)
   const [search, setSearch] = useState('')
   const [deleteId, setDeleteId] = useState(null)
+  const [roleId, setRoleId] = useState(null)
+  const [roleAction, setRoleAction] = useState(null)
 
   const fetchUsers = useCallback(async () => {
     setLoading(true)
@@ -42,6 +44,19 @@ export const UsersPage = () => {
     setDeleteId(null)
   }
 
+  const handleRoleChange = async () => {
+    try {
+      const newRole = roleAction === 'make_dueno' ? 'DUENO_ROLE' : 'USER_ROLE'
+      await adminService.updateUser(roleId, { role: newRole })
+      toast.success(`Rol actualizado a ${newRole === 'DUENO_ROLE' ? 'Dueño' : 'Usuario'}`)
+      fetchUsers()
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Error al cambiar rol')
+    }
+    setRoleId(null)
+    setRoleAction(null)
+  }
+
   const columns = [
     { key: 'id', label: 'ID', width: '60px', render: (v, row) => <span className="text-white/30 text-xs">{String(row.id || row._id || '')}</span> },
     { key: 'name', label: 'Nombre', render: (v, row) => (
@@ -54,14 +69,26 @@ export const UsersPage = () => {
     )},
     { key: 'email', label: 'Email', render: (v) => <span className="text-white/60 text-sm">{v}</span> },
     { key: 'username', label: 'Username', render: (v) => <span className="text-white/40 text-sm">{v}</span> },
-    { key: 'role', label: 'Rol', render: (v) => <Badge color={v === 'ADMIN_ROLE' ? 'purple' : 'blue'}>{v === 'ADMIN_ROLE' ? 'Admin' : 'Usuario'}</Badge> },
+    { key: 'role', label: 'Rol', render: (v) => {
+      const color = v === 'ADMIN_ROLE' ? 'purple' : v === 'DUENO_ROLE' ? 'yellow' : 'blue'
+      const label = v === 'ADMIN_ROLE' ? 'Admin' : v === 'DUENO_ROLE' ? 'Dueño' : 'Usuario'
+      return <Badge color={color}>{label}</Badge>
+    }},
     { key: 'status', label: 'Estado', render: (v) => <Badge color={v ? 'green' : 'red'}>{v ? 'Activo' : 'Inactivo'}</Badge> },
     {
       key: 'actions', label: '', render: (_, row) => (
-        <button onClick={(e) => { e.stopPropagation(); setDeleteId(row.id || row._id) }}
-          className="btn-sm btn-danger">
-          Eliminar
-        </button>
+        <div className="flex items-center gap-2">
+          {row.role !== 'ADMIN_ROLE' && (
+            <button onClick={(e) => { e.stopPropagation(); setRoleId(row.id || row._id); setRoleAction(row.role === 'DUENO_ROLE' ? 'remove_dueno' : 'make_dueno') }}
+              className={`btn-sm ${row.role === 'DUENO_ROLE' ? 'btn-outline' : 'btn-primary'}`}>
+              {row.role === 'DUENO_ROLE' ? 'Quitar Dueño' : 'Hacer Dueño'}
+            </button>
+          )}
+          <button onClick={(e) => { e.stopPropagation(); setDeleteId(row.id || row._id) }}
+            className="btn-sm btn-danger">
+            Eliminar
+          </button>
+        </div>
       ),
     },
   ]
@@ -80,6 +107,10 @@ export const UsersPage = () => {
       </div>
       <ConfirmDialog isOpen={Boolean(deleteId)} onClose={() => setDeleteId(null)} onConfirm={handleDelete}
         title="Eliminar Usuario" message="¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer." danger />
+      <ConfirmDialog isOpen={Boolean(roleId)} onClose={() => { setRoleId(null); setRoleAction(null) }} onConfirm={handleRoleChange}
+        title={roleAction === 'make_dueno' ? 'Hacer Dueño' : 'Quitar Dueño'}
+        message={roleAction === 'make_dueno' ? '¿Estás seguro de que deseas convertir a este usuario en Dueño? Podrá gestionar servicios y solicitudes.' : '¿Estás seguro de que deseas quitar el rol de Dueño a este usuario?'}
+        confirmText={roleAction === 'make_dueno' ? 'Hacer Dueño' : 'Quitar Dueño'} />
     </div>
   )
 }

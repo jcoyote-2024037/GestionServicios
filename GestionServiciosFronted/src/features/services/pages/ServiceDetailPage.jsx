@@ -199,6 +199,14 @@ export const ServiceDetailPage = () => {
                   <span className="text-white/70">Radio: {service.serviceAreaRadius} km</span>
                 </div>
               )}
+              {service.locationId && (
+                <div className="flex items-center gap-3 text-sm">
+                  <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  <span className="text-white/70">
+                    {[service.locationId.municipality, service.locationId.department, service.locationId.zona].filter(Boolean).join(' - ')}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 

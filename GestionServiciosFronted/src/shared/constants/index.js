@@ -1,6 +1,7 @@
 export const ROLES = {
   ADMIN: 'ADMIN_ROLE',
   USER: 'USER_ROLE',
+  DUENO: 'DUENO_ROLE',
 }
 
 export const SERVICE_STATUS = {

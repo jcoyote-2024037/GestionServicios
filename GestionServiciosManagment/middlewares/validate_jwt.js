@@ -19,7 +19,10 @@ export const validateJWT = (req, res, next) => {
 
         req.user = {
             id: decoded.sub,
-            role: decoded.role
+            role: decoded.role,
+            municipality: decoded.municipality || '',
+            department: decoded.department || '',
+            zona: decoded.zona || ''
         }
 
         next()

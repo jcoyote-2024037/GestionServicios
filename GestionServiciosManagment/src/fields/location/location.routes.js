@@ -16,10 +16,9 @@ import { locationValidator } from '../../../middlewares/locationValidator.js'
 
 const router = Router()
 
-// Obtiene todas las locations
+// Obtiene todas las locations (público — necesario para registro y búsqueda)
 router.get(
     '/',
-    validateJWT,
     getLocations
 )
 

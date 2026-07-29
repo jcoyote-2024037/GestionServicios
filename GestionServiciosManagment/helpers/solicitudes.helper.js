@@ -54,7 +54,7 @@ export const estadosPermitidos = (estadoActual, nuevoEstado, rol, esProveedor = 
 
     if (rol === 'ADMIN_ROLE') {
         transiciones = TRANSICIONES_ADMIN
-    } else if (esProveedor) {
+    } else if (esProveedor || rol === 'DUENO_ROLE') {
         transiciones = TRANSICIONES_PROVEEDOR
     } else {
         transiciones = TRANSICIONES_USER

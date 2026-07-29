@@ -6,6 +6,36 @@ import User from '../user/user.model.js'
 import { estadosPermitidos, notificarProveedor, expirarSolicitudesPendientes } from '../../../helpers/solicitudes.helper.js'
 import { formatearSolicitud } from '../../../utils/solicitudes.util.js'
 
+const attachUserInfo = async (solicitudes) => {
+    const list = Array.isArray(solicitudes) ? solicitudes : [solicitudes]
+    const userIds = [...new Set(list.map(s => s.usuarioId).filter(Boolean))]
+
+    let userMap = {}
+    if (userIds.length > 0) {
+        const users = await User.findAll({
+            where: { id: userIds },
+            attributes: ['id', 'name', 'surname', 'email', 'phone', 'username']
+        })
+        userMap = Object.fromEntries(users.map(u => [u.id, u]))
+    }
+
+    const result = list.map(s => {
+        const formatted = formatearSolicitud(s)
+        const user = userMap[s.usuarioId]
+        if (user) {
+            formatted.usuario = {
+                name: `${user.name} ${user.surname}`.trim(),
+                email: user.email,
+                phone: user.phone || '',
+                username: user.username,
+            }
+        }
+        return formatted
+    })
+
+    return Array.isArray(solicitudes) ? result : result[0]
+}
+
 /* ===========================
    CREAR SOLICITUD
 =========================== */
@@ -92,6 +122,10 @@ export const getSolicitudes = async (req, res) => {
         if (status) filtro.status = status
         else if (estado) filtro.estado = estado
 
+        if (req.user.role === 'DUENO_ROLE') {
+            filtro.proveedorId = req.user.id
+        }
+
         const [solicitudes, total] = await Promise.all([
             Solicitud.find(filtro)
                 .populate('servicioId')
@@ -101,9 +135,16 @@ export const getSolicitudes = async (req, res) => {
             Solicitud.countDocuments(filtro)
         ])
 
+        let data
+        try {
+            data = await attachUserInfo(solicitudes)
+        } catch {
+            data = solicitudes.map(s => formatearSolicitud(s))
+        }
+
         return res.status(200).json({
             success: true,
-            data: solicitudes.map(formatearSolicitud),
+            data,
             pagination: {
                 currentPage: safePage,
                 totalPages: Math.ceil(total / safeLimit),
@@ -131,7 +172,14 @@ export const getSolicitudById = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Solicitud no encontrada' })
         }
 
-        return res.status(200).json({ success: true, solicitud: formatearSolicitud(solicitud) })
+        let result
+        try {
+            result = await attachUserInfo(solicitud)
+        } catch {
+            result = formatearSolicitud(solicitud)
+        }
+
+        return res.status(200).json({ success: true, solicitud: result })
     } catch (error) {
         return res.status(500).json({
             success: false,
@@ -155,7 +203,7 @@ export const updateSolicitud = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Solicitud no encontrada' })
         }
 
-        if (solicitud.usuarioId !== usuarioId && req.user.role !== 'ADMIN_ROLE') {
+        if (solicitud.usuarioId !== usuarioId && req.user.role !== 'ADMIN_ROLE' && req.user.role !== 'DUENO_ROLE') {
             return res.status(403).json({ success: false, message: 'No tienes permiso para editar esta solicitud' })
         }
 
@@ -201,7 +249,7 @@ export const deleteSolicitud = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Solicitud no encontrada' })
         }
 
-        if (solicitud.usuarioId !== usuarioId && req.user.role !== 'ADMIN_ROLE') {
+        if (solicitud.usuarioId !== usuarioId && req.user.role !== 'ADMIN_ROLE' && req.user.role !== 'DUENO_ROLE') {
             return res.status(403).json({ success: false, message: 'No tienes permiso para eliminar esta solicitud' })
         }
 
@@ -236,7 +284,7 @@ export const cambiarEstado = async (req, res) => {
         const esProveedor = solicitud.proveedorId && solicitud.proveedorId === usuarioId
 
         // Solo el proveedor puede aceptar (regla de negocio)
-        if (nuevoEstado === 'accepted' && !esProveedor && rol !== 'ADMIN_ROLE') {
+        if (nuevoEstado === 'accepted' && !esProveedor && rol !== 'ADMIN_ROLE' && rol !== 'DUENO_ROLE') {
             return res.status(403).json({
                 success: false,
                 message: 'Solo el proveedor del servicio puede aceptar una solicitud'
@@ -289,7 +337,7 @@ export const cambiarEstado = async (req, res) => {
 export const getHistorialPorUsuario = async (req, res) => {
     try {
         const { usuarioId } = req.params
-        const { page = 1, limit = 10 } = req.query
+        const { page = 1, limit = 10, status, estado } = req.query
 
         const safePage  = Math.max(parseInt(page, 10)  || 1, 1)
         const safeLimit = Math.max(parseInt(limit, 10) || 10, 1)
@@ -299,18 +347,29 @@ export const getHistorialPorUsuario = async (req, res) => {
             return res.status(403).json({ success: false, message: 'No tienes permiso para ver este historial' })
         }
 
+        const filtro = { usuarioId: parseInt(usuarioId) }
+        if (status) filtro.status = status
+        else if (estado) filtro.estado = estado
+
         const [solicitudes, total] = await Promise.all([
-            Solicitud.find({ usuarioId: parseInt(usuarioId) })
+            Solicitud.find(filtro)
                 .populate('servicioId')
                 .sort({ fechaSolicitud: -1 })
                 .skip(offset)
                 .limit(safeLimit),
-            Solicitud.countDocuments({ usuarioId: parseInt(usuarioId) })
+            Solicitud.countDocuments(filtro)
         ])
+
+        let data
+        try {
+            data = await attachUserInfo(solicitudes)
+        } catch {
+            data = solicitudes.map(s => formatearSolicitud(s))
+        }
 
         return res.status(200).json({
             success: true,
-            data: solicitudes.map(formatearSolicitud),
+            data,
             pagination: { currentPage: safePage, totalPages: Math.ceil(total / safeLimit), totalRecords: total, limit: safeLimit }
         })
     } catch (error) {

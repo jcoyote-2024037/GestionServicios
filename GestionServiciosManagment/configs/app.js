@@ -21,6 +21,7 @@ import favoritesRoutes from '../src/fields/favorites/favorites.routes.js';
 import badgesRoutes from '../src/fields/badges/badges_routes.js';
 import logsRoutes from '../src/fields/logs/logs_routes.js';
 import aiRoutes from '../src/AI/ai.routes.js';
+import chatRoutes from '../src/fields/chat/chat.routes.js';
 import { seedAdmin } from '../seed.js';
 
 const BASE_PATH = '/gestionservicio/v1';
@@ -52,6 +53,7 @@ const routes = (app) => {
     app.use(`${BASE_PATH}/badges`, badgesRoutes);
     app.use(`${BASE_PATH}/logs`, logsRoutes);
     app.use(`${BASE_PATH}/ai`, aiRoutes);
+    app.use(`${BASE_PATH}/chat`, chatRoutes);
 
     /**
      * @swagger

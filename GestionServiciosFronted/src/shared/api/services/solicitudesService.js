@@ -7,7 +7,7 @@ export const solicitudesService = {
   update: (id, data) => api.put(`/solicitudes/update/${id}`, data),
   delete: (id) => api.delete(`/solicitudes/delete/${id}`),
   changeStatus: (id, data) => api.patch(`/solicitudes/estado/${id}`, data),
-  getHistoryByUser: (userId) => api.get(`/solicitudes/historial/usuario/${userId}`),
+  getHistoryByUser: (userId, params) => api.get(`/solicitudes/historial/usuario/${userId}`, { params }),
   getHistoryByService: (serviceId) => api.get(`/solicitudes/historial/servicio/${serviceId}`),
   expirePending: () => api.post('/solicitudes/expirar'),
 }

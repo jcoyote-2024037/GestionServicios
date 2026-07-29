@@ -12,6 +12,7 @@ export const useAuth = () => {
   const checkAuth = useAuthStore((s) => s.checkAuth)
 
   const isAdmin = user?.role === 'ADMIN_ROLE'
+  const isDueno = user?.role === 'DUENO_ROLE'
   const isUser = user?.role === 'USER_ROLE'
 
   return {
@@ -20,6 +21,7 @@ export const useAuth = () => {
     isAuthenticated,
     isLoadingAuth,
     isAdmin,
+    isDueno,
     isUser,
     login,
     register,

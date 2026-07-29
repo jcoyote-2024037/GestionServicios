@@ -1,6 +1,8 @@
 'use strict'
 
 import Service from './services.model.js'
+import Location from '../location/location.model.js'
+import User from '../user/user.model.js'
 
 // Crear servicio
 export const createService = async (req, res) => {
@@ -32,6 +34,7 @@ export const getServices = async (req, res) => {
 
         const services = await Service.find()
             .populate('categoriaId')
+            .populate('locationId')
 
         return res.status(200).json({
             success: true,
@@ -47,6 +50,27 @@ export const getServices = async (req, res) => {
     }
 }
 
+// Obtener servicios del usuario autenticado (Dueño)
+export const getMyServices = async (req, res) => {
+    try {
+        const services = await Service.find({ usuarioId: req.user.id })
+            .populate('categoriaId')
+            .populate('locationId')
+            .sort({ createdAt: -1 })
+
+        return res.status(200).json({
+            success: true,
+            services
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Error al obtener tus servicios',
+            error: error.message
+        })
+    }
+}
+
 // Obtener por ID
 export const getServiceById = async (req, res) => {
 
@@ -56,6 +80,7 @@ export const getServiceById = async (req, res) => {
 
         const service = await Service.findById(id)
             .populate('categoriaId')
+            .populate('locationId')
 
         if (!service) {
             return res.status(404).json({
@@ -92,7 +117,22 @@ export const updateService = async (req, res) => {
 
         const { id } = req.params
 
-        const service = await Service.findByIdAndUpdate(
+        const service = await Service.findById(id)
+        if (!service) {
+            return res.status(404).json({
+                success: false,
+                message: 'Servicio no encontrado'
+            })
+        }
+
+        if (req.user.role === 'DUENO_ROLE' && service.usuarioId !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: 'No tienes permiso para editar este servicio'
+            })
+        }
+
+        const updated = await Service.findByIdAndUpdate(
             id,
             req.body,
             {
@@ -101,17 +141,10 @@ export const updateService = async (req, res) => {
             }
         )
 
-        if (!service) {
-            return res.status(404).json({
-                success: false,
-                message: 'Servicio no encontrado'
-            })
-        }
-
         return res.status(200).json({
             success: true,
             message: 'Servicio actualizado',
-            service
+            service: updated
         })
 
     } catch (error) {
@@ -129,14 +162,22 @@ export const deleteService = async (req, res) => {
 
         const { id } = req.params
 
-        const service = await Service.findByIdAndDelete(id)
-
+        const service = await Service.findById(id)
         if (!service) {
             return res.status(404).json({
                 success: false,
                 message: 'Servicio no encontrado'
             })
         }
+
+        if (req.user.role === 'DUENO_ROLE' && service.usuarioId !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: 'No tienes permiso para eliminar este servicio'
+            })
+        }
+
+        await Service.findByIdAndDelete(id)
 
         return res.status(200).json({
             success: true,
@@ -200,4 +241,63 @@ export const getPopularServices = async (req,res)=>{
 
     }
 
+}
+
+// Cerca de mi
+export const getNearbyServices = async (req, res) => {
+    try {
+        let { municipality, department, zona } = req.user
+
+        if (!municipality && !department && !zona) {
+            const user = await User.findByPk(req.user.id, {
+                attributes: ['municipality', 'department', 'zona']
+            })
+            if (user) {
+                municipality = user.municipality
+                department = user.department
+                zona = user.zona
+            }
+        }
+
+        if (!municipality && !department && !zona) {
+            return res.status(200).json({
+                success: true,
+                services: []
+            })
+        }
+
+        const filtroLocation = {}
+        if (municipality) filtroLocation.municipality = { $regex: `^${municipality.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, $options: 'i' }
+        if (department) filtroLocation.department = { $regex: `^${department.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, $options: 'i' }
+        if (zona) filtroLocation.zona = { $regex: `^${zona.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, $options: 'i' }
+
+        const locations = await Location.find(filtroLocation)
+        const locationIds = locations.map(l => l._id)
+
+        if (locationIds.length === 0) {
+            return res.status(200).json({
+                success: true,
+                services: []
+            })
+        }
+
+        const services = await Service.find({
+            locationId: { $in: locationIds },
+            estado: 'activo'
+        })
+            .populate('categoriaId')
+            .populate('locationId')
+
+        return res.status(200).json({
+            success: true,
+            services
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Error al buscar servicios cercanos',
+            error: error.message
+        })
+    }
 }

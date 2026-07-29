@@ -38,7 +38,7 @@ const User = sequelize.define('User', {
     },
 
     role: {
-        type: DataTypes.ENUM('ADMIN_ROLE', 'USER_ROLE'),
+        type: DataTypes.ENUM('ADMIN_ROLE', 'USER_ROLE', 'DUENO_ROLE'),
         defaultValue: 'USER_ROLE'
     },
 
@@ -64,6 +64,21 @@ const User = sequelize.define('User', {
     },
     deleteTokenExpiration: {
         type: DataTypes.BIGINT
+    },
+
+    municipality: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+
+    department: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+
+    zona: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 
 }, {

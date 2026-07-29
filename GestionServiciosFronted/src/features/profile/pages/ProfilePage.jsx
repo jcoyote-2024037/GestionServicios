@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import { useAuth } from '../../../shared/hooks/useAuth'
 import { solicitudesService } from '../../../shared/api/services/solicitudesService'
 import { servicesService } from '../../../shared/api/services/servicesService'
+import { adminService } from '../../../shared/api/services/adminService'
 import { Badge } from '../../../shared/components/ui/Badge'
 import { Spinner } from '../../../shared/components/ui/Spinner'
 import { EmptyState } from '../../../shared/components/ui/EmptyState'
@@ -22,14 +23,24 @@ export const ProfilePage = () => {
   const [myServices, setMyServices] = useState([])
   const [myHistory, setMyHistory] = useState([])
   const [loadingData, setLoadingData] = useState(false)
+  const [locations, setLocations] = useState([])
 
   const { register: regProfile, handleSubmit: submitProfile, formState: { errors: errProfile, isSubmitting: subProfile } } = useForm({
     defaultValues: {
       name: user?.name || '',
       surname: user?.surname || '',
       username: user?.username || '',
+      locationId: '',
     }
   })
+
+  useEffect(() => {
+    adminService.getLocations().then((res) => {
+      const body = res.data
+      const list = body?.data || body?.locations || []
+      setLocations(Array.isArray(list) ? list : [])
+    }).catch(() => {})
+  }, [])
 
   const { register: regPass, handleSubmit: submitPass, formState: { errors: errPass, isSubmitting: subPass }, reset: resetPass } = useForm()
 
@@ -55,7 +66,15 @@ export const ProfilePage = () => {
 
   const onUpdateProfile = async (formData) => {
     try {
-      await updateProfile(formData)
+      const loc = locations.find((l) => String(l._id || l.id) === formData.locationId)
+      await updateProfile({
+        name: formData.name,
+        surname: formData.surname,
+        username: formData.username,
+        municipality: loc?.municipality || '',
+        department: loc?.department || '',
+        zona: loc?.zona || ''
+      })
       toast.success('Perfil actualizado')
     } catch (err) {
       toast.error(err.response?.data?.message || 'Error al actualizar')
@@ -131,6 +150,17 @@ export const ProfilePage = () => {
                 <label className="block text-xs text-white/40 mb-1">Email</label>
                 <input value={user?.email || ''} disabled className="glass-input opacity-50" />
                 <p className="text-xs text-white/20 mt-1">El email no se puede cambiar</p>
+              </div>
+              <div>
+                <label className="block text-xs text-white/40 mb-1">Ubicación</label>
+                <select className="glass-input" {...regProfile('locationId')}>
+                  <option value="" className="bg-[#111928]">{(user?.municipality ? [user?.municipality, user?.department, user?.zona].filter(Boolean).join(' - ') : 'Seleccionar ubicación')}</option>
+                  {locations.map((loc) => (
+                    <option key={loc._id || loc.id} value={loc._id || loc.id} className="bg-[#111928]">
+                      {[loc.municipality, loc.department, loc.zona].filter(Boolean).join(' - ')}
+                    </option>
+                  ))}
+                </select>
               </div>
               <button type="submit" disabled={subProfile}
                 className="btn-primary">

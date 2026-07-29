@@ -14,7 +14,7 @@ import { sendVerificationEmail, sendResendVerificationEmail, sendPasswordResetEm
 export const register = async (req, res) => {
     try {
 
-        const { name, surname, username, email, password, phone } = req.body;
+        const { name, surname, username, email, password, phone, municipality, department, zona } = req.body;
 
         const existingUser = await User.findOne({ where: { email } });
 
@@ -40,7 +40,10 @@ export const register = async (req, res) => {
             password: encryptedPassword,
             role,
             emailToken,
-            emailVerified: false
+            emailVerified: false,
+            municipality: municipality || null,
+            department: department || null,
+            zona: zona || null
         });
 
         let emailSent = false;
@@ -108,7 +111,10 @@ export const login = async (req, res) => {
             name: user.name,
             surname: user.surname,
             username: user.username,
-            email: user.email
+            email: user.email,
+            municipality: user.municipality || '',
+            department: user.department || '',
+            zona: user.zona || ''
         };
 
         const token = jwt.sign(

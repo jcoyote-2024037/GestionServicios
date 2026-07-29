@@ -55,29 +55,7 @@ router.post('/create', solicitudesValidator, createSolicitud)
  *       403:
  *         description: Acceso denegado
  */
-router.get('/', requireRole('ADMIN_ROLE'), getSolicitudes)
-
-/**
- * @swagger
- * /solicitudes/{id}:
- *   get:
- *     summary: Obtener solicitud por ID
- *     tags: [Solicitudes]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Solicitud encontrada
- *       404:
- *         description: No encontrada
- */
-router.get('/:id', getSolicitudById)
+router.get('/', requireRole('ADMIN_ROLE', 'DUENO_ROLE'), getSolicitudes)
 
 /**
  * @swagger
@@ -103,7 +81,7 @@ router.get('/:id', getSolicitudById)
  *       200:
  *         description: Solicitud actualizada
  */
-router.put('/update/:id', solicitudesValidator, updateSolicitud)
+router.put('/update/:id', requireRole('ADMIN_ROLE', 'DUENO_ROLE'), solicitudesValidator, updateSolicitud)
 
 /**
  * @swagger
@@ -123,7 +101,7 @@ router.put('/update/:id', solicitudesValidator, updateSolicitud)
  *       200:
  *         description: Solicitud eliminada
  */
-router.delete('/delete/:id', deleteSolicitud)
+router.delete('/delete/:id', requireRole('ADMIN_ROLE', 'DUENO_ROLE'), deleteSolicitud)
 
 /**
  * @swagger
@@ -190,6 +168,28 @@ router.get('/historial/usuario/:usuarioId', getHistorialPorUsuario)
  *         description: Historial del servicio
  */
 router.get('/historial/servicio/:servicioId', getHistorialPorServicio)
+
+/**
+ * @swagger
+ * /solicitudes/{id}:
+ *   get:
+ *     summary: Obtener solicitud por ID
+ *     tags: [Solicitudes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Solicitud encontrada
+ *       404:
+ *         description: No encontrada
+ */
+router.get('/:id', getSolicitudById)
 
 // Expiración automática (admin / cron)
 router.post('/expirar', requireRole('ADMIN_ROLE'), expirarSolicitudes)

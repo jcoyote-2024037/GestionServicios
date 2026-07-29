@@ -3,7 +3,7 @@
 import { Router } from "express"
 import {
     createService, getServices, getServiceById,
-    updateService, deleteService
+    updateService, deleteService, getMyServices, getNearbyServices
 } from "./services.controller.js"
 import { servicesValidator } from "../../../middlewares/servicesValidator.js"
 import { validateJWT } from "../../../middlewares/validate_jwt.js"
@@ -44,6 +44,23 @@ router.post('/create', validateJWT, servicesValidator, createService)
  *         description: Lista de servicios
  */
 router.get('/', getServices)
+
+/**
+ * @swagger
+ * /services/mine:
+ *   get:
+ *     summary: Obtener servicios del usuario autenticado (Dueño)
+ *     tags: [Services]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de servicios del usuario
+ */
+router.get('/mine', validateJWT, getMyServices)
+
+router.get('/nearby', validateJWT, getNearbyServices)
+
 /**
  * @swagger
  * /services/{id}:
@@ -92,7 +109,7 @@ router.get('/:id', validateJWT, getServiceById)
  *       403:
  *         description: Acceso denegado
  */
-router.put('/update/:id', validateJWT, requireRole('ADMIN_ROLE'), servicesValidator, updateService)
+router.put('/update/:id', validateJWT, requireRole('ADMIN_ROLE', 'DUENO_ROLE'), servicesValidator, updateService)
 
 /**
  * @swagger
@@ -114,5 +131,5 @@ router.put('/update/:id', validateJWT, requireRole('ADMIN_ROLE'), servicesValida
  *       404:
  *         description: Servicio no encontrado
  */
-router.delete('/delete/:id', validateJWT, deleteService)
+router.delete('/delete/:id', validateJWT, requireRole('ADMIN_ROLE', 'DUENO_ROLE'), deleteService)
 export default router

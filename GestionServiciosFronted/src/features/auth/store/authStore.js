@@ -19,6 +19,9 @@ const extractUser = (payload) => {
     surname: payload.surname || '',
     username: payload.username || '',
     email: payload.email || '',
+    municipality: payload.municipality || '',
+    department: payload.department || '',
+    zona: payload.zona || '',
   }
 }
 
@@ -79,7 +82,8 @@ export const useAuthStore = create(
         try {
           const userId = get().user?.id
           const { data } = await api.put(`/users/${userId}`, formData)
-          if (formData.name || formData.surname || formData.username) {
+          const hasChanges = formData.name || formData.surname || formData.username || formData.municipality || formData.department || formData.zona
+          if (hasChanges) {
             set({ user: { ...get().user, ...formData } })
           }
           return { success: true }
