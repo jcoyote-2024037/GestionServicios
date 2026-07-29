@@ -1,0 +1,33 @@
+'use strict'
+
+import { Router } from "express"
+
+import {
+    createCategory,
+    getCategories,
+    getCategoryById,
+    updateCategory,
+    deleteCategory,
+    getActiveCategories
+} from "./categories.controller.js"
+
+import { categoriesValidator } from "../../../middlewares/categoriesValidator.js"
+
+const router = Router()
+
+router.post('/create', categoriesValidator, createCategory)
+
+router.get('/', getCategories)
+
+router.get('/active', getActiveCategories)
+router.get('/activo', getActiveCategories)
+router.get('/inactivo', getActiveCategories)
+
+
+router.get('/:id', getCategoryById)
+
+router.put('/update/:id', categoriesValidator, updateCategory)
+
+router.delete('/delete/:id', deleteCategory)
+
+export default router

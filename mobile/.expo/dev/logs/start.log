@@ -1,0 +1,17 @@
+{"_e":"root:init","_t":1785346426810,"format":"v0-jsonl","version":"57.0.10"}
+{"_e":"env:mode","_t":1785346426814,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1785346426828,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1785346430317,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1785346433578,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1785346441363,"plugins":[]}
+{"_e":"metro:instantiate","_t":1785346477348,"atlas":false,"workers":3,"host":"::","port":8081}
+{"_e":"root:init","_t":1785346487929,"format":"v0-jsonl","version":"57.0.10"}
+{"_e":"env:mode","_t":1785346487931,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1785346487942,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1785346489077,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1785346490209,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1785346492518,"plugins":[]}
+{"_e":"metro:instantiate","_t":1785346515854,"atlas":false,"workers":3,"host":"::","port":8081}
+{"_e":"root:init","_t":1785346523098,"format":"v0-jsonl","version":"57.0.10"}
+{"_e":"env:mode","_t":1785346523100,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1785346523107,"mode":"development","files":[],"env":{}}

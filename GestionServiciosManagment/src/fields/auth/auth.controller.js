@@ -1,0 +1,375 @@
+'use strict'
+
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import { Op } from 'sequelize';
+import User from '../user/user.model.js';
+import { sendVerificationEmail, sendResendVerificationEmail, sendPasswordResetEmail } from '../../../helpers/email-service.js';
+
+/* ===========================
+   REGISTER
+=========================== */
+
+export const register = async (req, res) => {
+    try {
+
+        const { name, surname, username, email, password, phone, municipality, department, zona } = req.body;
+
+        const existingUser = await User.findOne({ where: { email } });
+
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: 'El correo ya está registrado'
+            });
+        }
+
+        const encryptedPassword = await bcrypt.hash(password, 10);
+        const emailToken = crypto.randomBytes(32).toString('hex');
+
+        const totalUsers = await User.count();
+        const role = totalUsers === 0 ? 'ADMIN_ROLE' : 'USER_ROLE';
+
+        await User.create({
+            name,
+            surname,
+            username,
+            email,
+            phone,
+            password: encryptedPassword,
+            role,
+            emailToken,
+            emailVerified: false,
+            municipality: municipality || null,
+            department: department || null,
+            zona: zona || null
+        });
+
+        let emailSent = false;
+        try {
+            await sendVerificationEmail(email, name, emailToken);
+            emailSent = true;
+        } catch (emailError) {
+            console.error('Error enviando correo de verificación:', emailError.message);
+        }
+
+        return res.status(201).json({
+            success: true,
+            message: emailSent
+                ? 'Usuario creado. Revisa tu correo para verificar tu cuenta.'
+                : 'Usuario creado. No se pudo enviar el correo de verificación. Solicita un nuevo enlace desde la página de verificación.',
+            emailSent
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+
+/* ===========================
+   LOGIN
+=========================== */
+
+export const login = async (req, res) => {
+    try {
+
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Credenciales inválidas'
+            });
+        }
+
+        if (!user.emailVerified) {
+            return res.status(403).json({
+                success: false,
+                message: 'Debes verificar tu correo primero'
+            });
+        }
+
+        const validPassword = await bcrypt.compare(password, user.password);
+
+        if (!validPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'Credenciales inválidas'
+            });
+        }
+
+        const payload = {
+            sub: user.id,
+            role: user.role,
+            name: user.name,
+            surname: user.surname,
+            username: user.username,
+            email: user.email,
+            municipality: user.municipality || '',
+            department: user.department || '',
+            zona: user.zona || ''
+        };
+
+        const token = jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '2h' }
+        );
+
+        return res.json({
+            success: true,
+            token
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Error en login',
+            error: error.message
+        });
+    }
+};
+
+
+/* ===========================
+   VERIFY EMAIL
+=========================== */
+
+export const verifyEmail = async (req, res) => {
+    try {
+
+        const token = req.body?.token || req.query?.token;
+
+        if (!token) {
+            return res.status(400).json({
+                success: false,
+                message: 'Token no proporcionado'
+            });
+        }
+
+        const user = await User.findOne({
+            where: { emailToken: token }
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Token inválido'
+            });
+        }
+
+        user.emailVerified = true;
+        user.emailToken = null;
+
+        await user.save();
+
+        return res.json({
+            success: true,
+            message: 'Correo verificado correctamente'
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+/* ===========================
+   RESEND VERIFICATION EMAIL
+=========================== */
+
+export const resendVerification = async (req, res) => {
+    try {
+
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                success: false,
+                message: 'Debes proporcionar un correo'
+            });
+        }
+
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        if (user.emailVerified) {
+            return res.status(400).json({
+                success: false,
+                message: 'La cuenta ya está verificada'
+            });
+        }
+
+        const newEmailToken = crypto.randomBytes(32).toString('hex');
+        user.emailToken = newEmailToken;
+        await user.save();
+
+        let emailSent = false;
+        try {
+            await sendResendVerificationEmail(user.email, user.name, newEmailToken);
+            emailSent = true;
+        } catch (emailError) {
+            console.error('Error reenviando correo de verificación:', emailError.message);
+        }
+
+        return res.json({
+            success: true,
+            message: emailSent
+                ? 'Correo de verificación reenviado correctamente'
+                : 'Se generó un nuevo enlace, pero no se pudo enviar el correo. Intenta más tarde.',
+            emailSent
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+/* ===========================
+   REQUEST RESET PASSWORD
+=========================== */
+
+export const requestPasswordReset = async (req, res) => {
+    try {
+
+        const { email } = req.body;
+
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'No existe usuario con ese correo'
+            });
+        }
+
+        const resetToken = crypto.randomBytes(32).toString('hex');
+
+        user.resetToken = resetToken;
+        user.resetTokenExpiration = Date.now() + 3600000;
+
+        await user.save();
+
+        try {
+            await sendPasswordResetEmail(user.email, user.name, resetToken);
+        } catch (emailError) {
+            console.error('Error enviando correo de recuperación:', emailError.message);
+        }
+
+        return res.json({
+            success: true,
+            message: 'Correo de recuperación enviado'
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+
+/* ===========================
+   RESET PASSWORD
+=========================== */
+
+export const resetPassword = async (req, res) => {
+    try {
+
+        const { token, newPassword } = req.body;
+
+        const user = await User.findOne({
+            where: {
+                resetToken: token,
+                resetTokenExpiration: {
+                    [Op.gt]: Date.now()
+                }
+            }
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Token inválido o expirado'
+            });
+        }
+
+        const encryptedPassword = await bcrypt.hash(newPassword, 10);
+
+        user.password = encryptedPassword;
+        user.resetToken = null;
+        user.resetTokenExpiration = null;
+
+        await user.save();
+
+        return res.json({
+            success: true,
+            message: 'Contraseña restablecida correctamente'
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+
+/* ===========================
+   LIST USERS (ADMIN)
+=========================== */
+
+export const listUsers = async (req, res) => {
+    try {
+
+        const { page = 1, limit = 10 } = req.query;
+
+        const safePage = Math.max(parseInt(page, 10) || 1, 1);
+        const safeLimit = Math.max(parseInt(limit, 10) || 10, 1);
+        const offset = (safePage - 1) * safeLimit;
+
+        const { rows, count } = await User.findAndCountAll({
+            attributes: { exclude: ['password', 'emailToken', 'resetToken', 'resetTokenExpiration', 'deleteToken', 'deleteTokenExpiration'] },
+            limit: safeLimit,
+            offset,
+            order: [['createdAt', 'DESC']]
+        });
+
+        return res.status(200).json({
+            success: true,
+            data: rows,
+            pagination: {
+                currentPage: safePage,
+                totalPages: Math.ceil(count / safeLimit),
+                totalRecords: count,
+                limit: safeLimit
+            }
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
