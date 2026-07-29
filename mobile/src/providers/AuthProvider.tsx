@@ -12,7 +12,7 @@ interface AuthState {
 }
 
 interface AuthContextType extends AuthState {
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string; role?: string }>
   register: (data: Record<string, unknown>) => Promise<{ success: boolean; error?: string }>
   logout: () => Promise<void>
   updateProfile: (data: Record<string, unknown>) => Promise<{ success: boolean; error?: string }>
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await tokenStorage.setToken(token)
       await tokenStorage.setUser(JSON.stringify(user))
       setState({ user, token, isAuthenticated: true, isLoadingAuth: false })
-      return { success: true }
+      return { success: true, role: user.role }
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } }
       const message = error.response?.data?.message || 'Credenciales incorrectas'

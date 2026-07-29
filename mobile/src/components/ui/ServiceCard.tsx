@@ -1,8 +1,9 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
 import { Card } from './Card'
 import { Badge } from './Badge'
-import { colors, typography } from '../../theme'
+import { colors, typography, radii } from '../../theme'
 import { Service } from '../../types'
 
 interface ServiceCardProps {
@@ -14,76 +15,83 @@ interface ServiceCardProps {
 
 export function ServiceCard({ service, onPress, onFavorite, isFavorited }: ServiceCardProps) {
   const categoria = typeof service.categoriaId === 'object' ? service.categoriaId?.nombre : ''
-  const categoriaId = typeof service.categoriaId === 'object' ? service.categoriaId?._id : service.categoriaId
+  const rating = service.averageRating || 0
 
   return (
-    <Card onPress={onPress}>
-      <View style={styles.header}>
-        <Text style={styles.name} numberOfLines={1}>{service.nombre}</Text>
+    <Card onPress={onPress} variant="elevated" style={styles.card}>
+      <LinearGradient
+        colors={['rgba(244,63,94,0.03)', 'transparent']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradient}
+      />
+      <View style={styles.topRow}>
+        <View style={styles.badgesRow}>
+          <Badge color={service.estado === 'activo' ? 'green' : 'gray'} size="sm">
+            {service.estado === 'activo' ? '● Activo' : '● Inactivo'}
+          </Badge>
+          {categoria && <Badge color="purple" outline size="sm">{categoria}</Badge>}
+        </View>
         {onFavorite && (
-          <TouchableOpacity onPress={onFavorite} style={styles.favBtn}>
+          <TouchableOpacity onPress={onFavorite} style={styles.favBtn} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
             <Text style={[styles.favIcon, isFavorited && styles.favActive]}>
               {isFavorited ? '♥' : '♡'}
             </Text>
           </TouchableOpacity>
         )}
       </View>
+
+      <Text style={styles.name} numberOfLines={1}>{service.nombre}</Text>
       <Text style={styles.description} numberOfLines={2}>{service.descripcion}</Text>
-      <View style={styles.meta}>
-        <Badge color={service.estado === 'activo' ? 'green' : 'gray'}>
-          {service.estado}
-        </Badge>
-        {categoria && <Badge color="purple">{categoria}</Badge>}
-      </View>
-      <View style={styles.stats}>
-        <Text style={styles.stat}>{service.viewsCount || 0} vistas</Text>
-        <Text style={styles.stat}>{service.favoritosCount || 0} favs</Text>
-        <Text style={styles.stat}>{service.reviewsCount || 0} reseñas</Text>
+
+      <View style={styles.divider} />
+
+      <View style={styles.statsRow}>
+        <View style={styles.stat}>
+          <Text style={styles.statValue}>{service.viewsCount || 0}</Text>
+          <Text style={styles.statLabel}>visitas</Text>
+        </View>
+        <View style={styles.stat}>
+          <Text style={styles.statValue}>{service.favoritosCount || 0}</Text>
+          <Text style={styles.statLabel}>favoritos</Text>
+        </View>
+        <View style={styles.stat}>
+          <Text style={styles.statValue}>{service.reviewsCount || 0}</Text>
+          <Text style={styles.statLabel}>reseñas</Text>
+        </View>
+        {rating > 0 && (
+          <View style={styles.stat}>
+            <Text style={[styles.statValue, { color: colors.yellow }]}>★ {rating.toFixed(1)}</Text>
+            <Text style={styles.statLabel}>rating</Text>
+          </View>
+        )}
       </View>
     </Card>
   )
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
+  card: { position: 'relative', overflow: 'hidden', padding: 0 },
+  gradient: { position: 'absolute', top: 0, left: 0, right: 0, height: 80 },
+  topRow: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start',
+    paddingHorizontal: 16, paddingTop: 14, marginBottom: 10,
   },
+  badgesRow: { flexDirection: 'row', gap: 6, flex: 1, flexWrap: 'wrap' },
+  favBtn: { width: 32, height: 32, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.04)', alignItems: 'center', justifyContent: 'center' },
+  favIcon: { fontSize: 18, color: colors.textMuted },
+  favActive: { color: colors.brand },
   name: {
-    color: colors.textPrimary,
-    fontSize: typography.sizes.md,
-    fontWeight: typography.weights.semibold,
-    flex: 1,
-  },
-  favBtn: {
-    padding: 4,
-  },
-  favIcon: {
-    fontSize: 20,
-    color: colors.textSecondary,
-  },
-  favActive: {
-    color: colors.brand,
+    color: colors.textPrimary, fontSize: typography.sizes.lg, fontWeight: typography.weights.bold,
+    paddingHorizontal: 16, marginBottom: 4,
   },
   description: {
-    color: colors.textSecondary,
-    fontSize: typography.sizes.sm,
-    lineHeight: 18,
-    marginBottom: 12,
+    color: colors.textSecondary, fontSize: typography.sizes.sm, lineHeight: 18,
+    paddingHorizontal: 16, marginBottom: 14,
   },
-  meta: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 12,
-  },
-  stats: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  stat: {
-    color: colors.textMuted,
-    fontSize: typography.sizes.xs,
-  },
+  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.04)', marginHorizontal: 16, marginBottom: 12 },
+  statsRow: { flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 14, gap: 20 },
+  stat: { alignItems: 'center', gap: 1 },
+  statValue: { color: colors.textPrimary, fontSize: typography.sizes.sm, fontWeight: typography.weights.semibold },
+  statLabel: { color: colors.textMuted, fontSize: typography.sizes.xs },
 })

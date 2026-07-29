@@ -26,7 +26,7 @@ export default function LoginScreen() {
   const onSubmit = async (data: LoginForm) => {
     const res = await login(data.email, data.password)
     if (res.success) {
-      router.replace('/(tabs)')
+      router.replace(res.role === 'ADMIN_ROLE' ? '/(admin)' : '/(tabs)')
     } else {
       const msg = res.error || 'Credenciales incorrectas'
       setError('root', { message: msg })

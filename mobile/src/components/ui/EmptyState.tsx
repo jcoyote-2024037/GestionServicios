@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { colors, typography } from '../../theme'
+import { colors, typography, radii } from '../../theme'
 
 interface EmptyStateProps {
   icon?: React.ReactNode
@@ -12,7 +12,11 @@ interface EmptyStateProps {
 export function EmptyState({ icon, title, description, action }: EmptyStateProps) {
   return (
     <View style={styles.container}>
-      {icon && <View style={styles.icon}>{icon}</View>}
+      {icon || (
+        <View style={styles.iconContainer}>
+          <Text style={styles.iconText}>📭</Text>
+        </View>
+      )}
       <Text style={styles.title}>{title}</Text>
       {description && <Text style={styles.description}>{description}</Text>}
       {action && <View style={styles.action}>{action}</View>}
@@ -22,15 +26,19 @@ export function EmptyState({ icon, title, description, action }: EmptyStateProps
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
-    gap: 12,
+    padding: 48,
+    gap: 10,
   },
-  icon: {
-    marginBottom: 8,
+  iconContainer: {
+    width: 72, height: 72, borderRadius: 36,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    alignItems: 'center', justifyContent: 'center',
+    marginBottom: 6,
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)',
   },
+  iconText: { fontSize: 32 },
   title: {
     color: colors.textPrimary,
     fontSize: typography.sizes.lg,
@@ -38,12 +46,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   description: {
-    color: colors.textSecondary,
+    color: colors.textMuted,
     fontSize: typography.sizes.base,
     textAlign: 'center',
     lineHeight: 20,
+    maxWidth: 260,
   },
-  action: {
-    marginTop: 8,
-  },
+  action: { marginTop: 10 },
 })

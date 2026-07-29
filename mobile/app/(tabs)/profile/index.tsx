@@ -59,7 +59,7 @@ export default function ProfileScreen() {
 }
 
 function ProfileTabContent({ user, logout, updateProfile }: {
-  user: { name?: string; surname?: string; username?: string; email?: string; id?: string } | null
+  user: { name?: string; surname?: string; username?: string; email?: string; id?: string; role?: string } | null
   logout: () => Promise<void>
   updateProfile: (data: Record<string, unknown>) => Promise<{ success: boolean; error?: string }>
 }) {
@@ -82,6 +82,11 @@ function ProfileTabContent({ user, logout, updateProfile }: {
 
   return (
     <View style={{ gap: 16 }}>
+      {user?.role === 'ADMIN_ROLE' && (
+        <Button variant="secondary" onPress={() => router.replace('/(admin)' as never)}>
+          Panel de Administración
+        </Button>
+      )}
       <Card style={{ gap: 12 }}>
         <Field label="Nombre" value={form.name} onChange={(t) => setForm((p) => ({ ...p, name: t }))} />
         <Field label="Apellido" value={form.surname} onChange={(t) => setForm((p) => ({ ...p, surname: t }))} />
