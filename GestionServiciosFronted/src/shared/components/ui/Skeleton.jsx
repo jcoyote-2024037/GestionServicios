@@ -68,7 +68,7 @@ export const ProfileSkeleton = () => (
 )
 
 export const StatCardSkeleton = () => (
-  <div className="stat-card p-5 space-y-3" style={{ '--stat-color': 'var(--brand)' } as React.CSSProperties}>
+  <div className="stat-card p-5 space-y-3" style={{ '--stat-color': 'var(--brand)' }}>
     <div className="flex items-center gap-3">
       <div className="w-10 h-10 rounded-xl shimmer-enhanced" />
       <div className="h-3 w-20 rounded-lg shimmer-enhanced" />

@@ -157,7 +157,7 @@ export const DashboardPage = () => {
             : statCards.map((card, i) => (
             <button key={card.label} onClick={() => navigate(card.route)}
               className="stat-card text-left group animate-fade-in"
-              style={{ animationDelay: `${i * 0.06}s`, '--stat-color': card.color } as React.CSSProperties}>
+               style={{ animationDelay: `${i * 0.06}s`, '--stat-color': card.color }}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="stat-icon" style={{ background: `${card.color}18`, color: card.color }}>
                   {card.icon}
