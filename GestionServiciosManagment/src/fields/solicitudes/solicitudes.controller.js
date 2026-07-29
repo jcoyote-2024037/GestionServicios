@@ -5,6 +5,7 @@ import Service from '../services/services.model.js'
 import User from '../user/user.model.js'
 import { estadosPermitidos, notificarProveedor, expirarSolicitudesPendientes } from '../../../helpers/solicitudes.helper.js'
 import { formatearSolicitud } from '../../../utils/solicitudes.util.js'
+import Notification from '../notifications/notification.model.js'
 
 const attachUserInfo = async (solicitudes) => {
     const list = Array.isArray(solicitudes) ? solicitudes : [solicitudes]
@@ -80,9 +81,25 @@ export const createSolicitud = async (req, res) => {
 
         await solicitud.save()
 
-        // Notificar al proveedor si tiene email registrado
-        if (servicio.usuarioId) {
-            const proveedor = await User.findOne({ id: servicio.usuarioId })
+        const io = req.app.get('io')
+        if (io && servicio.usuarioId) {
+            const proveedor = await User.findOne({ where: { id: servicio.usuarioId } })
+            io.to(`user_${servicio.usuarioId}`).emit('nueva_solicitud', {
+                solicitudId: solicitud._id,
+                servicioNombre: servicio.nombre,
+                usuarioNombre: req.user?.name || 'Un usuario',
+                descripcion: descripcion?.substring(0, 100),
+            })
+
+            await Notification.create({
+                usuarioId: servicio.usuarioId,
+                tipo: 'nueva_solicitud',
+                titulo: 'Nueva solicitud de servicio',
+                mensaje: `${req.user?.name || 'Un usuario'} solicitó: ${servicio.nombre}`,
+                referenciaId: solicitud._id.toString(),
+                metadata: { servicioNombre: servicio.nombre, descripcion: descripcion?.substring(0, 100) }
+            })
+
             if (proveedor?.email) {
                 await notificarProveedor(proveedor.email, {
                     nombreServicio: servicio.nombre,
@@ -316,6 +333,35 @@ export const cambiarEstado = async (req, res) => {
         })
 
         await solicitud.save()
+
+        const io = req.app.get('io')
+        if (io) {
+            const targetId = esProveedor ? solicitud.usuarioId : solicitud.proveedorId
+            if (targetId) {
+                const labelMap = {
+                    pending:    'pendiente',
+                    accepted:   'aceptada',
+                    rejected:   'rechazada',
+                    completed:  'completada',
+                    cancelled:  'cancelada',
+                    expired:    'expirada'
+                }
+                io.to(`user_${targetId}`).emit('solicitud_status_changed', {
+                    solicitudId: solicitud._id,
+                    nuevoEstado,
+                    cambiadoPor: usuarioId
+                })
+
+                await Notification.create({
+                    usuarioId: targetId,
+                    tipo: 'solicitud_status_changed',
+                    titulo: `Solicitud ${labelMap[nuevoEstado] || nuevoEstado}`,
+                    mensaje: `Tu solicitud ha sido ${labelMap[nuevoEstado] || nuevoEstado}`,
+                    referenciaId: solicitud._id.toString(),
+                    metadata: { nuevoEstado, cambiadoPor: usuarioId }
+                })
+            }
+        }
 
         return res.status(200).json({
             success: true,

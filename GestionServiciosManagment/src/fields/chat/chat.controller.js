@@ -3,6 +3,7 @@
 import ChatRoom from './chat.model.js'
 import Message from './message.model.js'
 import Solicitud from '../solicitudes/solicitudes.model.js'
+import Notification from '../notifications/notification.model.js'
 import User from '../user/user.model.js'
 
 export const initChat = async (req, res) => {
@@ -76,6 +77,15 @@ export const sendMessage = async (req, res) => {
             io.to(roomId).emit('new_message', populated)
             const targetId = req.user.id === room.clienteId ? room.proveedorId : room.clienteId
             io.to(`user_${targetId}`).emit('chat_notification', { roomId, solicitudId: room.solicitudId, text: text.trim().substring(0, 80), from: req.user.id })
+
+            await Notification.create({
+                usuarioId: targetId,
+                tipo: 'chat_notification',
+                titulo: 'Nuevo mensaje',
+                mensaje: text.trim().substring(0, 80),
+                referenciaId: room.solicitudId?.toString() || '',
+                metadata: { roomId, solicitudId: room.solicitudId }
+            })
         }
 
         return res.status(201).json({ success: true, message: populated })
