@@ -7,6 +7,9 @@ import morgan from 'morgan';
 import { dbConnection, connectPostgres, sequelize } from './db.js';
 import { corsOptions } from './cors-configuration.js';
 import { helmetConfiguration } from './helmet-configurations.js';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import { setupSocket } from './socket.js';
 import { setupSwagger } from './swagger.js';
 import locationRoutes from '../src/fields/location/location.routes.js';
 import userRoutes from '../src/fields/user/user.routes.js';
@@ -22,6 +25,7 @@ import badgesRoutes from '../src/fields/badges/badges_routes.js';
 import logsRoutes from '../src/fields/logs/logs_routes.js';
 import aiRoutes from '../src/AI/ai.routes.js';
 import chatRoutes from '../src/fields/chat/chat.routes.js';
+import notificationRoutes from '../src/fields/notifications/notification.routes.js';
 import { seedAdmin } from '../seed.js';
 
 const BASE_PATH = '/gestionservicio/v1';
@@ -54,6 +58,7 @@ const routes = (app) => {
     app.use(`${BASE_PATH}/logs`, logsRoutes);
     app.use(`${BASE_PATH}/ai`, aiRoutes);
     app.use(`${BASE_PATH}/chat`, chatRoutes);
+    app.use(`${BASE_PATH}/notifications`, notificationRoutes);
 
     /**
      * @swagger
@@ -96,7 +101,17 @@ export const initServer = async () => {
         middlewares(app);
         routes(app);
 
-        app.listen(PORT, () => {
+        const httpServer = createServer(app);
+        const io = new Server(httpServer, {
+            cors: {
+                origin: '*',
+                methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+            }
+        });
+        setupSocket(io);
+        app.set('io', io);
+
+        httpServer.listen(PORT, () => {
             console.log(`🚀 GestionServicios Server running on port ${PORT}`);
             console.log(`🏥 Health check: http://localhost:${PORT}${BASE_PATH}/Health`);
             console.log(`📄 Swagger UI:   http://localhost:${PORT}/api-docs`);
